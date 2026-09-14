@@ -1,0 +1,41 @@
+{
+  "dataset": "scenario_cases.json",
+  "database_fixture": "db/seed_scenarios.sql",
+  "total_cases": 14,
+  "total_model_calls": 22,
+  "stages": [
+    {
+      "name": "initial_full_run",
+      "model_calls": 14,
+      "passed": 7,
+      "total": 14,
+      "report": "scenario_cases-all-latest.json"
+    },
+    {
+      "name": "failed_cases_after_entity_hints",
+      "model_calls": 7,
+      "passed": 6,
+      "total": 7,
+      "passed_ids": [
+        "scenario_003",
+        "scenario_004",
+        "scenario_006",
+        "scenario_009",
+        "scenario_011",
+        "scenario_013"
+      ],
+      "remaining_id": "scenario_002"
+    },
+    {
+      "name": "metric_synonym_retry",
+      "model_calls": 1,
+      "passed": 1,
+      "total": 1,
+      "passed_ids": ["scenario_002"],
+      "report": "scenario_cases-all-selected-latest.json"
+    }
+  ],
+  "final_unique_cases_passed": 14,
+  "final_unique_cases_total": 14,
+  "final_execution_accuracy": 1.0
+}

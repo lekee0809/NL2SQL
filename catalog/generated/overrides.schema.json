@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "ColumnOverride": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "business_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Business Names",
+          "type": "array"
+        },
+        "sensitivity": {
+          "default": "normal",
+          "enum": [
+            "normal",
+            "internal",
+            "sensitive",
+            "restricted"
+          ],
+          "title": "Sensitivity",
+          "type": "string"
+        }
+      },
+      "title": "ColumnOverride",
+      "type": "object"
+    },
+    "TableOverride": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "business_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Business Names",
+          "type": "array"
+        }
+      },
+      "title": "TableOverride",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "override_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Override Version",
+      "type": "string"
+    },
+    "tables": {
+      "additionalProperties": {
+        "$ref": "#/$defs/TableOverride"
+      },
+      "title": "Tables",
+      "type": "object"
+    },
+    "columns": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ColumnOverride"
+      },
+      "title": "Columns",
+      "type": "object"
+    }
+  },
+  "title": "CatalogOverrides",
+  "type": "object"
+}

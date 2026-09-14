@@ -1,0 +1,659 @@
+{
+  "total": 65,
+  "covered": 65,
+  "average_full_chars": 1368.0,
+  "average_retrieved_chars": 486.2,
+  "average_reduction": 0.6446,
+  "rows": [
+    {
+      "id": "advanced_001",
+      "question": "查询2025年15号测试商品销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 478,
+      "reduction": 0.6506,
+      "metric_candidates": 2,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_002",
+      "question": "测试商品1去年卖了多少钱",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 426,
+      "reduction": 0.6886,
+      "metric_candidates": 1,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_003",
+      "question": "办公类商品2025年的销量",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 356,
+      "reduction": 0.7398,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_004",
+      "question": "支付宝产生了多少条支付记录",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 463,
+      "reduction": 0.6615,
+      "metric_candidates": 2,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_005",
+      "question": "微信支付去年有多少次付款",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 520,
+      "reduction": 0.6199,
+      "metric_candidates": 2,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_006",
+      "question": "已退款订单的销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 690,
+      "reduction": 0.4956,
+      "metric_candidates": 6,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_007",
+      "question": "华东地区2025年的平均客单价",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 335,
+      "reduction": 0.7551,
+      "metric_candidates": 2,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_008",
+      "question": "测试客户20去年的成交订单数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 676,
+      "reduction": 0.5058,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_009",
+      "question": "华南区域电子类商品的成交额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 480,
+      "reduction": 0.6491,
+      "metric_candidates": 3,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_010",
+      "question": "银行卡支付对应的订单数量",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 789,
+      "reduction": 0.4232,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_011",
+      "question": "信用卡付款的支付次数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 392,
+      "reduction": 0.7135,
+      "metric_candidates": 1,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_012",
+      "question": "已取消订单的订单总额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 561,
+      "reduction": 0.5899,
+      "metric_candidates": 4,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_013",
+      "question": "去年华东地区的销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 349,
+      "reduction": 0.7449,
+      "metric_candidates": 2,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_014",
+      "question": "本季度一共有多少成交订单",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 744,
+      "reduction": 0.4561,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_015",
+      "question": "上季度办公用品销量",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 368,
+      "reduction": 0.731,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_016",
+      "question": "最近30天有多少位购买客户",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 402,
+      "reduction": 0.7061,
+      "metric_candidates": 2,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_017",
+      "question": "最近三个月的平均订单金额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 688,
+      "reduction": 0.4971,
+      "metric_candidates": 6,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_018",
+      "question": "2025年2月销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 294,
+      "reduction": 0.7851,
+      "metric_candidates": 2,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_019",
+      "question": "2025年第四季度订单数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 668,
+      "reduction": 0.5117,
+      "metric_candidates": 4,
+      "dimension_candidates": 5
+    },
+    {
+      "id": "advanced_020",
+      "question": "2025年1月至3月成交额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 349,
+      "reduction": 0.7449,
+      "metric_candidates": 3,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_021",
+      "question": "2024年11月至2025年2月销售数量",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 294,
+      "reduction": 0.7851,
+      "metric_candidates": 2,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_022",
+      "question": "上个月支付宝支付次数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 449,
+      "reduction": 0.6718,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_023",
+      "question": "今年每个季度的客户数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 438,
+      "reduction": 0.6798,
+      "metric_candidates": 1,
+      "dimension_candidates": 5
+    },
+    {
+      "id": "advanced_024",
+      "question": "2025年每月平均订单金额趋势",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 682,
+      "reduction": 0.5015,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_025",
+      "question": "最近7天销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 300,
+      "reduction": 0.7807,
+      "metric_candidates": 2,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_026",
+      "question": "2024年第一季度到第二季度的销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 407,
+      "reduction": 0.7025,
+      "metric_candidates": 2,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_027",
+      "question": "去年销售额同比增长多少",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 477,
+      "reduction": 0.6513,
+      "metric_candidates": 5,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_028",
+      "question": "去年成交订单数同比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 748,
+      "reduction": 0.4532,
+      "metric_candidates": 7,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_029",
+      "question": "2025年第一季度销售额环比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 407,
+      "reduction": 0.7025,
+      "metric_candidates": 2,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_030",
+      "question": "2025年第四季度客户数同比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 549,
+      "reduction": 0.5987,
+      "metric_candidates": 3,
+      "dimension_candidates": 5
+    },
+    {
+      "id": "advanced_031",
+      "question": "最近30天订单数环比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 561,
+      "reduction": 0.5899,
+      "metric_candidates": 4,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_032",
+      "question": "最近三个月平均客单价环比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 292,
+      "reduction": 0.7865,
+      "metric_candidates": 2,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_033",
+      "question": "2025年1月至3月销售额环比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 294,
+      "reduction": 0.7851,
+      "metric_candidates": 2,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_034",
+      "question": "华东地区去年销售额同比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 526,
+      "reduction": 0.6155,
+      "metric_candidates": 5,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_035",
+      "question": "办公用品2025年第二季度销量同比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 419,
+      "reduction": 0.6937,
+      "metric_candidates": 1,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_036",
+      "question": "支付宝上个月支付次数环比",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 449,
+      "reduction": 0.6718,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_037",
+      "question": "2025年华东和华南销售额最高的5个商品",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 536,
+      "reduction": 0.6082,
+      "metric_candidates": 3,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_038",
+      "question": "2024年办公用品销量最低的三个商品",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 356,
+      "reduction": 0.7398,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_039",
+      "question": "2025年华北地区各月份订单数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 713,
+      "reduction": 0.4788,
+      "metric_candidates": 4,
+      "dimension_candidates": 6
+    },
+    {
+      "id": "advanced_040",
+      "question": "去年华南电子产品的销售数量",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 482,
+      "reduction": 0.6477,
+      "metric_candidates": 2,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_041",
+      "question": "2025年退款订单中金额最高的订单",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 683,
+      "reduction": 0.5007,
+      "metric_candidates": 5,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_042",
+      "question": "华东地区各商品类别的购买客户数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 464,
+      "reduction": 0.6608,
+      "metric_candidates": 1,
+      "dimension_candidates": 5
+    },
+    {
+      "id": "advanced_043",
+      "question": "2025年使用支付宝或微信的支付次数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 443,
+      "reduction": 0.6762,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_044",
+      "question": "测试客户_12在2025年的平均订单金额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 664,
+      "reduction": 0.5146,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_045",
+      "question": "2025年第二季度华东地区成交订单数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 671,
+      "reduction": 0.5095,
+      "metric_candidates": 5,
+      "dimension_candidates": 5
+    },
+    {
+      "id": "advanced_046",
+      "question": "2024到2025年各地区销售额排名",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 343,
+      "reduction": 0.7493,
+      "metric_candidates": 2,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_047",
+      "question": "已支付订单中平均成交单价最高的商品类别",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 834,
+      "reduction": 0.3904,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_048",
+      "question": "去年西南地区销量前五的商品",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 411,
+      "reduction": 0.6996,
+      "metric_candidates": 1,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_049",
+      "question": "各区域GMV排行",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 234,
+      "reduction": 0.8289,
+      "metric_candidates": 1,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_050",
+      "question": "按品类看售出件数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 255,
+      "reduction": 0.8136,
+      "metric_candidates": 1,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_051",
+      "question": "付款渠道分别有多少支付",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 463,
+      "reduction": 0.6615,
+      "metric_candidates": 2,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_052",
+      "question": "不同客户区域的平均客单价",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 395,
+      "reduction": 0.7113,
+      "metric_candidates": 3,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_053",
+      "question": "每年有多少购买用户",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 404,
+      "reduction": 0.7047,
+      "metric_candidates": 2,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_054",
+      "question": "成交金额最高的产品",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 608,
+      "reduction": 0.5556,
+      "metric_candidates": 6,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_055",
+      "question": "订单量最大的区域",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 610,
+      "reduction": 0.5541,
+      "metric_candidates": 4,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_056",
+      "question": "每季度GMV走势",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 298,
+      "reduction": 0.7822,
+      "metric_candidates": 1,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_057",
+      "question": "商品分类的成交单价均值",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 496,
+      "reduction": 0.6374,
+      "metric_candidates": 4,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_058",
+      "question": "最高一笔订单是多少钱",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 632,
+      "reduction": 0.538,
+      "metric_candidates": 5,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_059",
+      "question": "不同付款方式对应多少笔记录",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 463,
+      "reduction": 0.6615,
+      "metric_candidates": 2,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_060",
+      "question": "区域维度统计成交订单量",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 737,
+      "reduction": 0.4613,
+      "metric_candidates": 6,
+      "dimension_candidates": 4
+    },
+    {
+      "id": "advanced_061",
+      "question": "按月观察客单价变化",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 287,
+      "reduction": 0.7902,
+      "metric_candidates": 2,
+      "dimension_candidates": 1
+    },
+    {
+      "id": "advanced_062",
+      "question": "产品类别的用户覆盖数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 358,
+      "reduction": 0.7383,
+      "metric_candidates": 1,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_063",
+      "question": "售出数量最多的产品前十",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 305,
+      "reduction": 0.777,
+      "metric_candidates": 1,
+      "dimension_candidates": 2
+    },
+    {
+      "id": "advanced_064",
+      "question": "测试商品的销售额",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 427,
+      "reduction": 0.6879,
+      "metric_candidates": 2,
+      "dimension_candidates": 3
+    },
+    {
+      "id": "advanced_065",
+      "question": "测试客户的订单数",
+      "covered": true,
+      "full_chars": 1368,
+      "retrieved_chars": 714,
+      "reduction": 0.4781,
+      "metric_candidates": 5,
+      "dimension_candidates": 5
+    }
+  ]
+}

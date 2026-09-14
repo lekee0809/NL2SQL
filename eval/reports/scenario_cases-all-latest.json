@@ -1,0 +1,241 @@
+{
+  "split": "all",
+  "total": 14,
+  "passed": 7,
+  "strict_passed": 6,
+  "execution_accuracy": 0.5,
+  "strict_execution_accuracy": 0.4286,
+  "average_latency_ms": 3094.4,
+  "by_category": {
+    "entity_resolution": {
+      "total": 3,
+      "passed": 2
+    },
+    "named_customer": {
+      "total": 2,
+      "passed": 0
+    },
+    "time_grouping": {
+      "total": 1,
+      "passed": 1
+    },
+    "time_range": {
+      "total": 1,
+      "passed": 0
+    },
+    "comparison": {
+      "total": 1,
+      "passed": 1
+    },
+    "value_alias": {
+      "total": 1,
+      "passed": 1
+    },
+    "ranking_with_entity": {
+      "total": 1,
+      "passed": 0
+    },
+    "joined_count": {
+      "total": 1,
+      "passed": 0
+    },
+    "clarification": {
+      "total": 2,
+      "passed": 1
+    },
+    "not_found": {
+      "total": 1,
+      "passed": 1
+    }
+  },
+  "results": [
+    {
+      "id": "scenario_001",
+      "passed": true,
+      "strict_passed": true,
+      "status": 200,
+      "latency_ms": 3746.7,
+      "sql": "SELECT SUM(oi.quantity * oi.unit_price) AS \"销售额\" FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id JOIN products AS p ON p.id = oi.product_id WHERE (CAST(EXTRACT(YEAR FROM o.created_at) AS INT) = %s) AND (p.name = %s) AND (o.status = %s) LIMIT 200",
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": null,
+      "question": "2025年极光键盘标准版的销售额是多少",
+      "split": "scenario",
+      "category": "entity_resolution",
+      "difficulty": "medium"
+    },
+    {
+      "id": "scenario_002",
+      "passed": false,
+      "status": 400,
+      "latency_ms": 3297.4,
+      "error": "查询失败：calendar_month 需要 YYYY-MM",
+      "question": "2025年极光键盘专业版卖出了多少件",
+      "split": "scenario",
+      "category": "entity_resolution",
+      "difficulty": "medium"
+    },
+    {
+      "id": "scenario_003",
+      "passed": false,
+      "strict_passed": false,
+      "status": 200,
+      "latency_ms": 3643.6,
+      "sql": "SELECT COUNT(DISTINCT o.id) AS \"订单数\" FROM orders AS o JOIN customers AS c ON c.id = o.customer_id WHERE (c.name = %s) AND (o.created_at >= %s AND o.created_at < %s) AND (o.status = %s) LIMIT 200",
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": "结果与 gold SQL 不一致",
+      "question": "华东实验学校2025年的成交订单数",
+      "split": "scenario",
+      "category": "named_customer",
+      "difficulty": "medium"
+    },
+    {
+      "id": "scenario_004",
+      "passed": false,
+      "status": 400,
+      "latency_ms": 3023.9,
+      "error": "查询失败：数据库中找不到与“华东地区第一实验学校”接近的值",
+      "question": "华东地区第一实验学校2025年的销售额",
+      "split": "scenario",
+      "category": "named_customer",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_005",
+      "passed": true,
+      "strict_passed": true,
+      "status": 200,
+      "latency_ms": 2913.6,
+      "sql": "SELECT c.region AS \"地区\", SUM(oi.quantity * oi.unit_price) AS \"销售额\" FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id JOIN customers AS c ON c.id = o.customer_id WHERE (o.created_at >= %s AND o.created_at < %s) AND (o.status = %s) GROUP BY 1 LIMIT 200",
+      "predicted_rows": 5,
+      "expected_rows": 5,
+      "error": null,
+      "question": "2025年第一季度各地区的销售额",
+      "split": "scenario",
+      "category": "time_grouping",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_006",
+      "passed": false,
+      "strict_passed": false,
+      "status": 200,
+      "latency_ms": 2996.9,
+      "sql": "SELECT CAST(DATE_TRUNC('MONTH', o.created_at) AS DATE) AS \"月份\", SUM(oi.quantity * oi.unit_price) AS \"销售额\" FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id WHERE (o.created_at >= %s AND o.created_at < %s) AND (o.status = %s) GROUP BY 1 LIMIT 200",
+      "predicted_rows": 3,
+      "expected_rows": 3,
+      "error": "结果与 gold SQL 不一致",
+      "question": "2025年1月到3月每月销售额趋势",
+      "split": "scenario",
+      "category": "time_range",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_007",
+      "passed": true,
+      "strict_passed": false,
+      "status": 200,
+      "latency_ms": 3162.0,
+      "sql": "WITH current_period AS (SELECT SUM(oi.quantity * oi.unit_price) AS value FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id WHERE (o.created_at >= %s) AND (o.created_at < %s) AND (o.status = %s)), previous_period AS (SELECT SUM(oi.quantity * oi.unit_price) AS value FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id WHERE (o.created_at >= %s) AND (o.created_at < %s) AND (o.status = %s)) SELECT c.value AS \"本期销售额\", p.value AS \"上年同期销售额\", ROUND(CAST(((c.value - p.value) / NULLIF(p.value, 0) * 100) AS DECIMAL), 2) AS \"同比增长率\" FROM current_period AS c CROSS JOIN previous_period AS p LIMIT 1",
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": null,
+      "question": "2025年第二季度销售额同比怎么样",
+      "split": "scenario",
+      "category": "comparison",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_008",
+      "passed": true,
+      "strict_passed": true,
+      "status": 200,
+      "latency_ms": 2889.5,
+      "sql": "SELECT COUNT(DISTINCT pay.id) AS \"支付记录数\" FROM orders AS o JOIN payments AS pay ON pay.order_id = o.id WHERE (CAST(EXTRACT(YEAR FROM o.created_at) AS INT) = %s) AND (pay.method = %s) LIMIT 200",
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": null,
+      "question": "2025年支付宝一共支付了多少次",
+      "split": "scenario",
+      "category": "value_alias",
+      "difficulty": "medium"
+    },
+    {
+      "id": "scenario_009",
+      "passed": false,
+      "status": 400,
+      "latency_ms": 3305.1,
+      "error": "查询失败：calendar_month 需要 YYYY-MM",
+      "question": "华东实验学校2025年购买商品的销量前五名",
+      "split": "scenario",
+      "category": "ranking_with_entity",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_010",
+      "passed": true,
+      "strict_passed": true,
+      "status": 200,
+      "latency_ms": 2881.4,
+      "sql": "SELECT SUM(oi.quantity * oi.unit_price) AS \"销售额\" FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id JOIN products AS p ON p.id = oi.product_id WHERE (CAST(EXTRACT(YEAR FROM o.created_at) AS INT) = %s) AND (p.name = %s) AND (o.status = %s) LIMIT 200",
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": null,
+      "question": "2025年智慧教学白板A1的销售额",
+      "split": "scenario",
+      "category": "entity_resolution",
+      "difficulty": "medium"
+    },
+    {
+      "id": "scenario_011",
+      "passed": false,
+      "status": 400,
+      "latency_ms": 2783.8,
+      "error": "查询失败：calendar_month 需要 YYYY-MM",
+      "question": "2025年星云护眼台灯涉及多少个成交订单",
+      "split": "scenario",
+      "category": "joined_count",
+      "difficulty": "medium"
+    },
+    {
+      "id": "scenario_012",
+      "passed": true,
+      "status": 409,
+      "latency_ms": 2628.0,
+      "candidates": [
+        "极光键盘-专业版",
+        "极光键盘-标准版",
+        "极光无线鼠标"
+      ],
+      "error": null,
+      "question": "2025年极光键盘的销售额",
+      "split": "scenario",
+      "category": "clarification",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_013",
+      "passed": false,
+      "status": 200,
+      "latency_ms": 3325.0,
+      "candidates": [],
+      "error": "未返回预期的澄清候选",
+      "question": "2025年智慧教学白板的销售额",
+      "split": "scenario",
+      "category": "clarification",
+      "difficulty": "hard"
+    },
+    {
+      "id": "scenario_014",
+      "passed": true,
+      "status": 400,
+      "latency_ms": 2725.1,
+      "error": null,
+      "question": "2025年月球矿泉水的销售额",
+      "split": "scenario",
+      "category": "not_found",
+      "difficulty": "medium"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "split": "dev",
+  "total": 2,
+  "passed": 2,
+  "strict_passed": 1,
+  "execution_accuracy": 1.0,
+  "strict_execution_accuracy": 0.5,
+  "average_latency_ms": 5727.9,
+  "by_category": {
+    "basic": {
+      "total": 1,
+      "passed": 1
+    },
+    "aggregation": {
+      "total": 1,
+      "passed": 1
+    }
+  },
+  "results": [
+    {
+      "id": "basic_008",
+      "passed": true,
+      "strict_passed": false,
+      "status": 200,
+      "latency_ms": 5221.9,
+      "sql": "SELECT id, name, region FROM customers WHERE region = '华南' ORDER BY id ASC LIMIT 10",
+      "predicted_rows": 10,
+      "expected_rows": 10,
+      "error": null,
+      "question": "按客户编号升序列出华南地区前10个客户",
+      "split": "dev",
+      "category": "basic",
+      "difficulty": "easy"
+    },
+    {
+      "id": "aggregate_009",
+      "passed": true,
+      "strict_passed": true,
+      "status": 200,
+      "latency_ms": 6234.0,
+      "sql": "SELECT AVG(unit_price) FROM order_items LIMIT 200",
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": null,
+      "question": "不区分订单状态，所有订单明细的平均单价是多少",
+      "split": "dev",
+      "category": "aggregation",
+      "difficulty": "easy"
+    }
+  ]
+}

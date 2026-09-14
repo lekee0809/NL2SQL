@@ -1,0 +1,27 @@
+{
+  "metrics": {
+    "sales_amount": {"label": "销售额", "expression": "SUM(oi.quantity * oi.unit_price)", "tables": ["orders", "order_items"], "default_paid_only": true, "unit": "CNY", "synonyms": ["销售金额", "成交额", "GMV", "卖了多少钱"]},
+    "order_amount": {"label": "订单总额", "expression": "SUM(o.total_amount)", "tables": ["orders"], "default_paid_only": true, "unit": "CNY", "synonyms": ["订单金额"]},
+    "order_count": {"label": "订单数", "expression": "COUNT(DISTINCT o.id)", "tables": ["orders"], "default_paid_only": true, "synonyms": ["订单量", "成交订单数"]},
+    "sold_quantity": {"label": "销售数量", "expression": "SUM(oi.quantity)", "tables": ["orders", "order_items"], "default_paid_only": true, "synonyms": ["销量", "售出件数", "销售件数", "卖出多少件", "卖出了多少件"]},
+    "avg_order_amount": {"label": "平均订单金额", "expression": "AVG(o.total_amount)", "tables": ["orders"], "default_paid_only": true, "unit": "CNY", "synonyms": ["客单价", "平均客单价"]},
+    "avg_unit_price": {"label": "平均成交单价", "expression": "AVG(oi.unit_price)", "tables": ["orders", "order_items"], "default_paid_only": true, "unit": "CNY", "synonyms": ["平均单价"]},
+    "customer_count": {"label": "客户数", "expression": "COUNT(DISTINCT o.customer_id)", "tables": ["orders"], "default_paid_only": true, "synonyms": ["购买客户数", "用户数"]},
+    "payment_count": {"label": "支付记录数", "expression": "COUNT(DISTINCT pay.id)", "tables": ["orders", "payments"], "default_paid_only": false, "synonyms": ["支付次数"]},
+    "max_order_amount": {"label": "最大订单金额", "expression": "MAX(o.total_amount)", "tables": ["orders"], "default_paid_only": true, "unit": "CNY", "synonyms": ["最高订单金额"]}
+  },
+  "dimensions": {
+    "product": {"label": "商品", "expression": "p.name", "tables": ["products"], "value_type": "text", "synonyms": ["产品", "商品名称"], "retrieval_terms": ["测试商品", "商品编号"]},
+    "category": {"label": "商品类别", "expression": "p.category", "tables": ["products"], "value_type": "text", "synonyms": ["品类", "分类"], "retrieval_terms": ["办公用品", "电子产品", "家居用品", "食品"], "value_aliases": {"办公": "办公用品", "家居": "家居用品", "电子": "电子产品"}},
+    "region": {"label": "地区", "expression": "c.region", "tables": ["customers"], "value_type": "text", "synonyms": ["区域", "客户地区"], "retrieval_terms": ["华东", "华北", "华南", "西南", "西北"]},
+    "customer": {"label": "客户", "expression": "c.name", "tables": ["customers"], "value_type": "text", "synonyms": ["客户名称", "用户"], "retrieval_terms": ["测试客户", "客户编号"]},
+    "order_date": {"label": "下单日期", "expression": "o.created_at", "tables": ["orders"], "value_type": "date", "synonyms": ["订单日期", "购买时间"], "retrieval_terms": ["今年", "去年", "本月", "上月", "本季度", "上季度", "最近几天", "最近几个月", "时间范围"]},
+    "order_month": {"label": "月份", "expression": "DATE_TRUNC('month', o.created_at)::date", "tables": ["orders"], "value_type": "date", "synonyms": ["按月", "每月"], "retrieval_terms": ["月度", "月份趋势", "逐月"]},
+    "order_quarter": {"label": "季度", "expression": "DATE_TRUNC('quarter', o.created_at)::date", "tables": ["orders"], "value_type": "date", "synonyms": ["按季度", "每季度"], "retrieval_terms": ["季度趋势", "第一季度", "第二季度", "第三季度", "第四季度"]},
+    "order_year": {"label": "年份", "expression": "EXTRACT(YEAR FROM o.created_at)::int", "tables": ["orders"], "value_type": "number", "synonyms": ["按年", "每年"], "retrieval_terms": ["年度", "年份趋势", "逐年", "2024年", "2025年"]},
+    "payment_method": {"label": "支付方式", "expression": "pay.method", "tables": ["payments"], "value_type": "text", "synonyms": ["付款方式"], "value_aliases": {"支付宝": "alipay", "微信": "wechat", "微信支付": "wechat", "银行卡": "bank", "银行转账": "bank", "信用卡": "card", "银行卡支付": "card"}},
+    "order_status": {"label": "订单状态", "expression": "o.status", "tables": ["orders"], "value_type": "text", "synonyms": ["状态"], "value_aliases": {"已支付": "PAID", "已付款": "PAID", "支付成功": "PAID", "已取消": "CANCELLED", "取消": "CANCELLED", "已退款": "REFUNDED", "退款": "REFUNDED"}},
+    "order_id": {"label": "订单编号", "expression": "o.id", "tables": ["orders"], "value_type": "number", "synonyms": ["订单ID"]}
+  },
+  "rules": ["销售额使用订单明细粒度，订单总额使用订单粒度", "除支付记录数外，业务指标默认只统计 PAID 订单", "地区默认指客户所在地区", "金额单位为元"]
+}

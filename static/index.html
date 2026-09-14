@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>洞见 · 智能问数</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/resolver.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">◈</span><div><strong>洞见</strong><small>智能问数平台</small></div></div>
+      <div class="side-section">
+        <div class="side-title">示例问题</div>
+        <button class="example">2025年华东地区销售额最高的三个商品</button>
+        <button class="example">各地区的订单数量是多少</button>
+        <button class="example">2025年每月销售额趋势</button>
+        <button class="example">哪个商品类别销售额最高</button>
+      </div>
+      <div class="side-section history-section">
+        <div class="side-title">最近查询 <button id="clearHistory">清空</button></div>
+        <div id="history" class="history"></div>
+      </div>
+      <div class="side-footer"><span id="statusDot" class="dot"></span><span id="statusText">正在检查服务</span></div>
+    </aside>
+
+    <main>
+      <header><div><p class="eyebrow">ANALYTICS COPILOT</p><h1>用自然语言，直接询问你的数据</h1><p>模型负责理解问题，后端生成安全的只读查询并返回结果。</p></div><div><a href="/admin">数据源管理</a> <a href="/docs" target="_blank">API 文档 ↗</a></div></header>
+
+      <section class="ask-card">
+        <form id="queryForm">
+          <textarea id="question" maxlength="500" rows="3" placeholder="例如：2025年华东地区销售额最高的三个商品"></textarea>
+          <div class="ask-actions"><span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 发送</span><button id="submitBtn" type="submit"><span>开始查询</span><b>→</b></button></div>
+        </form>
+      </section>
+
+      <section id="welcome" class="welcome">
+        <div class="welcome-icon">✦</div><h2>从一个问题开始</h2><p>选择左侧示例，或者用自己的方式描述想看的数据。</p>
+        <div class="capabilities"><span>销售分析</span><span>趋势对比</span><span>地区排名</span><span>商品洞察</span></div>
+      </section>
+
+      <section id="loading" class="loading hidden"><div class="spinner"></div><div><strong>正在分析问题</strong><p>千问正在生成结构化查询计划…</p></div></section>
+
+      <section id="result" class="result hidden">
+        <div class="result-head"><div><p class="eyebrow">QUERY RESULT</p><h2 id="resultTitle"></h2></div><div id="rowCount" class="badge"></div></div>
+        <div id="resolutionNotice" class="resolution-notice hidden"></div>
+        <div class="tabs"><button class="tab active" data-tab="tablePanel">数据表格</button><button class="tab" data-tab="chartPanel">图表</button><button class="tab" data-tab="sqlPanel">生成的 SQL</button></div>
+        <div id="tablePanel" class="panel active"><div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
+        <div id="chartPanel" class="panel"><div id="chart" class="chart"></div></div>
+        <div id="sqlPanel" class="panel"><pre><code id="sqlCode"></code></pre><button id="copySql" class="copy-btn">复制 SQL</button></div>
+      </section>
+
+      <section id="error" class="error hidden"><strong>查询没有完成</strong><p id="errorText"></p></section>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

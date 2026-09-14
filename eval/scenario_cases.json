@@ -1,0 +1,85 @@
+[
+  {
+    "id": "scenario_001", "split": "scenario", "category": "entity_resolution", "difficulty": "medium",
+    "question": "2025年极光键盘标准版的销售额是多少",
+    "gold_sql": "SELECT SUM(oi.quantity * oi.unit_price) AS sales_amount FROM order_items oi JOIN orders o ON oi.order_id = o.id JOIN products p ON oi.product_id = p.id WHERE o.status = 'PAID' AND p.name = '极光键盘-标准版' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_002", "split": "scenario", "category": "entity_resolution", "difficulty": "medium",
+    "question": "2025年极光键盘专业版卖出了多少件",
+    "gold_sql": "SELECT SUM(oi.quantity) AS sold_quantity FROM order_items oi JOIN orders o ON oi.order_id = o.id JOIN products p ON oi.product_id = p.id WHERE o.status = 'PAID' AND p.name = '极光键盘-专业版' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_003", "split": "scenario", "category": "named_customer", "difficulty": "medium",
+    "question": "华东实验学校2025年的成交订单数",
+    "gold_sql": "SELECT COUNT(DISTINCT o.id) AS order_count FROM orders o JOIN customers c ON o.customer_id = c.id WHERE o.status = 'PAID' AND c.name = '华东实验学校' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_004", "split": "scenario", "category": "named_customer", "difficulty": "hard",
+    "question": "华东地区第一实验学校2025年的销售额",
+    "gold_sql": "SELECT SUM(oi.quantity * oi.unit_price) AS sales_amount FROM order_items oi JOIN orders o ON oi.order_id = o.id JOIN customers c ON o.customer_id = c.id WHERE o.status = 'PAID' AND c.name = '华东地区第一实验学校' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_005", "split": "scenario", "category": "time_grouping", "difficulty": "hard",
+    "question": "2025年第一季度各地区的销售额",
+    "gold_sql": "SELECT c.region, SUM(oi.quantity * oi.unit_price) AS sales_amount FROM order_items oi JOIN orders o ON oi.order_id = o.id JOIN customers c ON o.customer_id = c.id WHERE o.status = 'PAID' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2025-04-01' GROUP BY c.region ORDER BY c.region",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_006", "split": "scenario", "category": "time_range", "difficulty": "hard",
+    "question": "2025年1月到3月每月销售额趋势",
+    "gold_sql": "SELECT DATE_TRUNC('month', o.created_at)::date AS month, SUM(oi.quantity * oi.unit_price) AS sales_amount FROM order_items oi JOIN orders o ON oi.order_id = o.id WHERE o.status = 'PAID' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2025-04-01' GROUP BY 1 ORDER BY 1",
+    "ordered": true, "expected": "result"
+  },
+  {
+    "id": "scenario_007", "split": "scenario", "category": "comparison", "difficulty": "hard",
+    "question": "2025年第二季度销售额同比怎么样",
+    "gold_sql": "WITH current_period AS (SELECT SUM(oi.quantity * oi.unit_price) AS value FROM orders o JOIN order_items oi ON oi.order_id = o.id WHERE o.created_at >= DATE '2025-04-01' AND o.created_at < DATE '2025-07-01' AND o.status = 'PAID'), previous_period AS (SELECT SUM(oi.quantity * oi.unit_price) AS value FROM orders o JOIN order_items oi ON oi.order_id = o.id WHERE o.created_at >= DATE '2024-04-01' AND o.created_at < DATE '2024-07-01' AND o.status = 'PAID') SELECT c.value, p.value, ROUND(((c.value - p.value) / NULLIF(p.value, 0) * 100)::numeric, 2) FROM current_period c CROSS JOIN previous_period p",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_008", "split": "scenario", "category": "value_alias", "difficulty": "medium",
+    "question": "2025年支付宝一共支付了多少次",
+    "gold_sql": "SELECT COUNT(DISTINCT pay.id) AS payment_count FROM orders o JOIN payments pay ON pay.order_id = o.id WHERE pay.method = 'alipay' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_009", "split": "scenario", "category": "ranking_with_entity", "difficulty": "hard",
+    "question": "华东实验学校2025年购买商品的销量前五名",
+    "gold_sql": "SELECT p.name, SUM(oi.quantity) AS sold_quantity FROM order_items oi JOIN orders o ON oi.order_id = o.id JOIN products p ON oi.product_id = p.id JOIN customers c ON o.customer_id = c.id WHERE o.status = 'PAID' AND c.name = '华东实验学校' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01' GROUP BY p.name ORDER BY sold_quantity DESC, p.name LIMIT 5",
+    "ordered": true, "expected": "result"
+  },
+  {
+    "id": "scenario_010", "split": "scenario", "category": "entity_resolution", "difficulty": "medium",
+    "question": "2025年智慧教学白板A1的销售额",
+    "gold_sql": "SELECT SUM(oi.quantity * oi.unit_price) AS sales_amount FROM order_items oi JOIN orders o ON oi.order_id = o.id JOIN products p ON oi.product_id = p.id WHERE o.status = 'PAID' AND p.name = '智慧教学白板A1' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_011", "split": "scenario", "category": "joined_count", "difficulty": "medium",
+    "question": "2025年星云护眼台灯涉及多少个成交订单",
+    "gold_sql": "SELECT COUNT(DISTINCT o.id) AS order_count FROM orders o JOIN order_items oi ON oi.order_id = o.id JOIN products p ON oi.product_id = p.id WHERE o.status = 'PAID' AND p.name = '星云护眼台灯' AND o.created_at >= DATE '2025-01-01' AND o.created_at < DATE '2026-01-01'",
+    "ordered": false, "expected": "result"
+  },
+  {
+    "id": "scenario_012", "split": "scenario", "category": "clarification", "difficulty": "hard",
+    "question": "2025年极光键盘的销售额",
+    "gold_sql": null, "ordered": false, "expected": "clarification",
+    "expected_candidates": ["极光键盘-标准版", "极光键盘-专业版"]
+  },
+  {
+    "id": "scenario_013", "split": "scenario", "category": "clarification", "difficulty": "hard",
+    "question": "2025年智慧教学白板的销售额",
+    "gold_sql": null, "ordered": false, "expected": "clarification",
+    "expected_candidates": ["智慧教学白板A1", "智慧教学白板A2"]
+  },
+  {
+    "id": "scenario_014", "split": "scenario", "category": "not_found", "difficulty": "medium",
+    "question": "2025年月球矿泉水的销售额",
+    "gold_sql": null, "ordered": false, "expected": "rejected"
+  }
+]

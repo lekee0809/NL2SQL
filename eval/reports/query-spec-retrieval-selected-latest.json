@@ -1,0 +1,304 @@
+{
+  "mode": "retrieval",
+  "api_calls": 5,
+  "total": 5,
+  "passed": 5,
+  "results": [
+    {
+      "id": "advanced_001",
+      "question": "查询2025年15号测试商品销售额",
+      "passed": true,
+      "checks": {
+        "metrics": true,
+        "dimensions": true,
+        "filter_fields": true,
+        "comparison": true,
+        "order_by": true,
+        "limit": true
+      },
+      "expected_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "product",
+            "operator": "eq",
+            "value": "15号测试商品",
+            "values": []
+          },
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "actual_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "product",
+            "operator": "eq",
+            "value": "15号测试商品",
+            "values": []
+          },
+          {
+            "field": "order_year",
+            "operator": "calendar_month",
+            "value": "2025-15",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "latency_ms": 3110.3,
+      "error": null
+    },
+    {
+      "id": "advanced_022",
+      "question": "上个月支付宝支付次数",
+      "passed": true,
+      "checks": {
+        "metrics": true,
+        "dimensions": true,
+        "filter_fields": true,
+        "comparison": true,
+        "order_by": true,
+        "limit": true
+      },
+      "expected_spec": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "order_date",
+            "operator": "last_month",
+            "value": "",
+            "values": []
+          },
+          {
+            "field": "payment_method",
+            "operator": "eq",
+            "value": "支付宝",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "actual_spec": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "payment_method",
+            "operator": "eq",
+            "value": "支付宝",
+            "values": []
+          },
+          {
+            "field": "order_date",
+            "operator": "last_month",
+            "value": "",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "latency_ms": 3331.4,
+      "error": null
+    },
+    {
+      "id": "advanced_027",
+      "question": "去年销售额同比增长多少",
+      "passed": true,
+      "checks": {
+        "metrics": true,
+        "dimensions": true,
+        "filter_fields": true,
+        "comparison": true,
+        "order_by": true,
+        "limit": true
+      },
+      "expected_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "order_date",
+            "operator": "last_year",
+            "value": "",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": {
+          "type": "year_over_year"
+        }
+      },
+      "actual_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "order_date",
+            "operator": "last_year",
+            "value": "",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": {
+          "type": "year_over_year"
+        }
+      },
+      "latency_ms": 2523.3,
+      "error": null
+    },
+    {
+      "id": "advanced_037",
+      "question": "2025年华东和华南销售额最高的5个商品",
+      "passed": true,
+      "checks": {
+        "metrics": true,
+        "dimensions": true,
+        "filter_fields": true,
+        "comparison": true,
+        "order_by": true,
+        "limit": true
+      },
+      "expected_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": []
+          },
+          {
+            "field": "region",
+            "operator": "in",
+            "value": "",
+            "values": [
+              "华东",
+              "华南"
+            ]
+          }
+        ],
+        "order_by": [
+          {
+            "field": "sales_amount",
+            "direction": "desc"
+          }
+        ],
+        "limit": 5,
+        "comparison": null
+      },
+      "actual_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": []
+          },
+          {
+            "field": "region",
+            "operator": "in",
+            "value": "",
+            "values": [
+              "华东",
+              "华南"
+            ]
+          }
+        ],
+        "order_by": [
+          {
+            "field": "sales_amount",
+            "direction": "desc"
+          }
+        ],
+        "limit": 5,
+        "comparison": null
+      },
+      "latency_ms": 3431.9,
+      "error": null
+    },
+    {
+      "id": "advanced_052",
+      "question": "不同客户区域的平均客单价",
+      "passed": true,
+      "checks": {
+        "metrics": true,
+        "dimensions": true,
+        "filter_fields": true,
+        "comparison": true,
+        "order_by": true,
+        "limit": true
+      },
+      "expected_spec": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "region"
+        ],
+        "filters": [],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "actual_spec": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "region"
+        ],
+        "filters": [],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "latency_ms": 1931.6,
+      "error": null
+    }
+  ],
+  "rescored_without_api_calls": true
+}

@@ -1,0 +1,44 @@
+.candidate-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.candidate-list button {
+  border: 1px solid #dbaea3;
+  background: white;
+  color: #74362d;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.candidate-list button:hover {
+  background: #fde8e3;
+}
+
+.resolution-notice {
+  margin: 0 26px 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #eef8f4;
+  color: #176b5b;
+  font-size: 13px;
+}
+
+.growth-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: #122b27;
+  color: #d9eee7;
+}
+
+.growth-card strong {
+  color: #8dd3be;
+  font-size: 24px;
+}

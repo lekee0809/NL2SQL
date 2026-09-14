@@ -1,0 +1,495 @@
+{
+  "catalog_version": "1.0",
+  "generated_at": "2026-09-14T12:17:08.434040Z",
+  "source": {
+    "id": "analytics_local",
+    "name": "智能问数演示库",
+    "dialect": "postgresql",
+    "database": "analytics"
+  },
+  "tables": [
+    {
+      "id": "analytics_local.public.customers",
+      "schema_name": "public",
+      "name": "customers",
+      "description": "客户主数据，每位客户属于一个地区",
+      "business_names": [
+        "客户",
+        "用户"
+      ],
+      "estimated_rows": 200,
+      "columns": [
+        {
+          "id": "analytics_local.public.customers.id",
+          "name": "id",
+          "ordinal_position": 1,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": false,
+          "default": "nextval('customers_id_seq'::regclass)",
+          "description": "客户唯一编号",
+          "business_names": [
+            "客户ID"
+          ],
+          "sensitivity": "internal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.customers.name",
+          "name": "name",
+          "ordinal_position": 2,
+          "native_type": "text",
+          "canonical_type": "string",
+          "nullable": false,
+          "default": null,
+          "description": "客户名称",
+          "business_names": [
+            "客户",
+            "客户名称"
+          ],
+          "sensitivity": "sensitive",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.customers.region",
+          "name": "region",
+          "ordinal_position": 3,
+          "native_type": "text",
+          "canonical_type": "string",
+          "nullable": false,
+          "default": null,
+          "description": "客户所在地区",
+          "business_names": [
+            "地区",
+            "客户地区",
+            "区域"
+          ],
+          "sensitivity": "normal",
+          "sample_values": [
+            "华北",
+            "华东",
+            "华南",
+            "西北",
+            "西南"
+          ]
+        }
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "customers_pkey",
+          "definition": "CREATE UNIQUE INDEX customers_pkey ON public.customers USING btree (id)"
+        }
+      ]
+    },
+    {
+      "id": "analytics_local.public.order_items",
+      "schema_name": "public",
+      "name": "order_items",
+      "description": "订单商品明细，销售额应在该粒度计算",
+      "business_names": [
+        "订单明细",
+        "销售明细"
+      ],
+      "estimated_rows": 4048,
+      "columns": [
+        {
+          "id": "analytics_local.public.order_items.id",
+          "name": "id",
+          "ordinal_position": 1,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": false,
+          "default": "nextval('order_items_id_seq'::regclass)",
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.order_items.order_id",
+          "name": "order_id",
+          "ordinal_position": 2,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": true,
+          "default": null,
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.order_items.product_id",
+          "name": "product_id",
+          "ordinal_position": 3,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": true,
+          "default": null,
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.order_items.quantity",
+          "name": "quantity",
+          "ordinal_position": 4,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": false,
+          "default": null,
+          "description": "订单明细商品数量",
+          "business_names": [
+            "数量",
+            "销量"
+          ],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.order_items.unit_price",
+          "name": "unit_price",
+          "ordinal_position": 5,
+          "native_type": "numeric",
+          "canonical_type": "decimal",
+          "nullable": false,
+          "default": null,
+          "description": "订单明细成交单价",
+          "business_names": [
+            "成交单价",
+            "单价"
+          ],
+          "sensitivity": "normal",
+          "sample_values": []
+        }
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "id": "analytics_local.public.order_items.fk.order_items_order_id_fkey",
+          "name": "order_items_order_id_fkey",
+          "columns": [
+            "order_id"
+          ],
+          "referenced_schema": "public",
+          "referenced_table": "orders",
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "id": "analytics_local.public.order_items.fk.order_items_product_id_fkey",
+          "name": "order_items_product_id_fkey",
+          "columns": [
+            "product_id"
+          ],
+          "referenced_schema": "public",
+          "referenced_table": "products",
+          "referenced_columns": [
+            "id"
+          ]
+        }
+      ],
+      "indexes": [
+        {
+          "name": "order_items_pkey",
+          "definition": "CREATE UNIQUE INDEX order_items_pkey ON public.order_items USING btree (id)"
+        }
+      ]
+    },
+    {
+      "id": "analytics_local.public.orders",
+      "schema_name": "public",
+      "name": "orders",
+      "description": "订单头信息，保存客户、日期、状态和订单总额",
+      "business_names": [
+        "订单"
+      ],
+      "estimated_rows": 2000,
+      "columns": [
+        {
+          "id": "analytics_local.public.orders.id",
+          "name": "id",
+          "ordinal_position": 1,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": false,
+          "default": "nextval('orders_id_seq'::regclass)",
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.orders.customer_id",
+          "name": "customer_id",
+          "ordinal_position": 2,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": true,
+          "default": null,
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.orders.created_at",
+          "name": "created_at",
+          "ordinal_position": 3,
+          "native_type": "date",
+          "canonical_type": "date",
+          "nullable": false,
+          "default": null,
+          "description": "订单创建日期",
+          "business_names": [
+            "下单日期",
+            "订单日期"
+          ],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.orders.status",
+          "name": "status",
+          "ordinal_position": 4,
+          "native_type": "text",
+          "canonical_type": "string",
+          "nullable": false,
+          "default": null,
+          "description": "订单状态",
+          "business_names": [
+            "订单状态",
+            "状态"
+          ],
+          "sensitivity": "normal",
+          "sample_values": [
+            "CANCELLED",
+            "PAID",
+            "REFUNDED"
+          ]
+        },
+        {
+          "id": "analytics_local.public.orders.total_amount",
+          "name": "total_amount",
+          "ordinal_position": 5,
+          "native_type": "numeric",
+          "canonical_type": "decimal",
+          "nullable": false,
+          "default": null,
+          "description": "订单头总金额，不应直接按商品维度汇总",
+          "business_names": [
+            "订单总额",
+            "订单金额"
+          ],
+          "sensitivity": "normal",
+          "sample_values": []
+        }
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "id": "analytics_local.public.orders.fk.orders_customer_id_fkey",
+          "name": "orders_customer_id_fkey",
+          "columns": [
+            "customer_id"
+          ],
+          "referenced_schema": "public",
+          "referenced_table": "customers",
+          "referenced_columns": [
+            "id"
+          ]
+        }
+      ],
+      "indexes": [
+        {
+          "name": "orders_pkey",
+          "definition": "CREATE UNIQUE INDEX orders_pkey ON public.orders USING btree (id)"
+        }
+      ]
+    },
+    {
+      "id": "analytics_local.public.payments",
+      "schema_name": "public",
+      "name": "payments",
+      "description": "已支付订单的支付记录",
+      "business_names": [
+        "支付",
+        "付款记录"
+      ],
+      "estimated_rows": 1208,
+      "columns": [
+        {
+          "id": "analytics_local.public.payments.id",
+          "name": "id",
+          "ordinal_position": 1,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": false,
+          "default": "nextval('payments_id_seq'::regclass)",
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.payments.order_id",
+          "name": "order_id",
+          "ordinal_position": 2,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": true,
+          "default": null,
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.payments.paid_at",
+          "name": "paid_at",
+          "ordinal_position": 3,
+          "native_type": "date",
+          "canonical_type": "date",
+          "nullable": true,
+          "default": null,
+          "description": "支付日期",
+          "business_names": [
+            "支付日期",
+            "付款时间"
+          ],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.payments.method",
+          "name": "method",
+          "ordinal_position": 4,
+          "native_type": "text",
+          "canonical_type": "string",
+          "nullable": true,
+          "default": null,
+          "description": "支付渠道代码",
+          "business_names": [
+            "支付方式",
+            "付款方式"
+          ],
+          "sensitivity": "normal",
+          "sample_values": [
+            "alipay",
+            "bank",
+            "card",
+            "wechat"
+          ]
+        }
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "id": "analytics_local.public.payments.fk.payments_order_id_fkey",
+          "name": "payments_order_id_fkey",
+          "columns": [
+            "order_id"
+          ],
+          "referenced_schema": "public",
+          "referenced_table": "orders",
+          "referenced_columns": [
+            "id"
+          ]
+        }
+      ],
+      "indexes": [
+        {
+          "name": "payments_pkey",
+          "definition": "CREATE UNIQUE INDEX payments_pkey ON public.payments USING btree (id)"
+        }
+      ]
+    },
+    {
+      "id": "analytics_local.public.products",
+      "schema_name": "public",
+      "name": "products",
+      "description": "商品主数据及商品类别",
+      "business_names": [
+        "商品",
+        "产品"
+      ],
+      "estimated_rows": 0,
+      "columns": [
+        {
+          "id": "analytics_local.public.products.id",
+          "name": "id",
+          "ordinal_position": 1,
+          "native_type": "integer",
+          "canonical_type": "integer",
+          "nullable": false,
+          "default": "nextval('products_id_seq'::regclass)",
+          "description": null,
+          "business_names": [],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.products.name",
+          "name": "name",
+          "ordinal_position": 2,
+          "native_type": "text",
+          "canonical_type": "string",
+          "nullable": false,
+          "default": null,
+          "description": "商品名称",
+          "business_names": [
+            "商品",
+            "产品",
+            "商品名称"
+          ],
+          "sensitivity": "normal",
+          "sample_values": []
+        },
+        {
+          "id": "analytics_local.public.products.category",
+          "name": "category",
+          "ordinal_position": 3,
+          "native_type": "text",
+          "canonical_type": "string",
+          "nullable": false,
+          "default": null,
+          "description": "商品所属类别",
+          "business_names": [
+            "商品类别",
+            "品类",
+            "分类"
+          ],
+          "sensitivity": "normal",
+          "sample_values": [
+            "办公用品",
+            "电子产品",
+            "家居用品",
+            "食品"
+          ]
+        }
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "products_pkey",
+          "definition": "CREATE UNIQUE INDEX products_pkey ON public.products USING btree (id)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "override_version": "1.0",
+  "tables": {
+    "public.customers": {"description": "客户主数据，每位客户属于一个地区", "business_names": ["客户", "用户"]},
+    "public.products": {"description": "商品主数据及商品类别", "business_names": ["商品", "产品"]},
+    "public.orders": {"description": "订单头信息，保存客户、日期、状态和订单总额", "business_names": ["订单"]},
+    "public.order_items": {"description": "订单商品明细，销售额应在该粒度计算", "business_names": ["订单明细", "销售明细"]},
+    "public.payments": {"description": "已支付订单的支付记录", "business_names": ["支付", "付款记录"]}
+  },
+  "columns": {
+    "public.customers.id": {"description": "客户唯一编号", "business_names": ["客户ID"], "sensitivity": "internal"},
+    "public.customers.name": {"description": "客户名称", "business_names": ["客户", "客户名称"], "sensitivity": "sensitive"},
+    "public.customers.region": {"description": "客户所在地区", "business_names": ["地区", "客户地区", "区域"], "sensitivity": "normal"},
+    "public.products.name": {"description": "商品名称", "business_names": ["商品", "产品", "商品名称"], "sensitivity": "normal"},
+    "public.products.category": {"description": "商品所属类别", "business_names": ["商品类别", "品类", "分类"], "sensitivity": "normal"},
+    "public.orders.created_at": {"description": "订单创建日期", "business_names": ["下单日期", "订单日期"], "sensitivity": "normal"},
+    "public.orders.status": {"description": "订单状态", "business_names": ["订单状态", "状态"], "sensitivity": "normal"},
+    "public.orders.total_amount": {"description": "订单头总金额，不应直接按商品维度汇总", "business_names": ["订单总额", "订单金额"], "sensitivity": "normal"},
+    "public.order_items.quantity": {"description": "订单明细商品数量", "business_names": ["数量", "销量"], "sensitivity": "normal"},
+    "public.order_items.unit_price": {"description": "订单明细成交单价", "business_names": ["成交单价", "单价"], "sensitivity": "normal"},
+    "public.payments.paid_at": {"description": "支付日期", "business_names": ["支付日期", "付款时间"], "sensitivity": "normal"},
+    "public.payments.method": {"description": "支付渠道代码", "business_names": ["支付方式", "付款方式"], "sensitivity": "normal"}
+  }
+}

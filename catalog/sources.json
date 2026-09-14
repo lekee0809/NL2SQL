@@ -1,0 +1,15 @@
+{
+  "registry_version": "1.0",
+  "sources": [
+    {
+      "id": "analytics_local",
+      "name": "智能问数演示库",
+      "dialect": "postgresql",
+      "connection_env": "DATABASE_URL",
+      "enabled": true,
+      "catalog_dir": "catalog/generated",
+      "overrides_file": "catalog/overrides.json",
+      "business_dictionary_file": "business_dictionary.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据源管理 · 洞见</title>
+  <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <header><div><p>DATA SOURCES</p><h1>数据源管理</h1><span>连接信息通过环境变量读取，页面不会显示或保存数据库密码。</span></div><a href="/">返回问数 →</a></header>
+    <section class="toolbar"><button id="refresh">刷新状态</button><label><input id="samples" type="checkbox"> 扫描低基数字段候选值</label></section>
+    <section id="sources" class="source-grid"></section>
+    <section class="search-card">
+      <div><p>RETRIEVAL PREVIEW</p><h2>目录检索预览</h2></div>
+      <form id="searchForm"><input id="searchQuery" placeholder="例如：去年成交额最高的地区"><button>检索</button></form>
+      <div id="searchResults" class="search-results"></div>
+    </section>
+  </main>
+  <script src="/static/admin.js"></script>
+</body>
+</html>

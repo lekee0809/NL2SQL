@@ -1,0 +1,321 @@
+{
+  "$defs": {
+    "ColumnMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "ordinal_position": {
+          "title": "Ordinal Position",
+          "type": "integer"
+        },
+        "native_type": {
+          "title": "Native Type",
+          "type": "string"
+        },
+        "canonical_type": {
+          "enum": [
+            "string",
+            "integer",
+            "decimal",
+            "boolean",
+            "date",
+            "datetime",
+            "json",
+            "binary",
+            "other"
+          ],
+          "title": "Canonical Type",
+          "type": "string"
+        },
+        "nullable": {
+          "title": "Nullable",
+          "type": "boolean"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Default"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Description"
+        },
+        "business_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Business Names",
+          "type": "array"
+        },
+        "sensitivity": {
+          "default": "normal",
+          "enum": [
+            "normal",
+            "internal",
+            "sensitive",
+            "restricted"
+          ],
+          "title": "Sensitivity",
+          "type": "string"
+        },
+        "sample_values": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sample Values",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "ordinal_position",
+        "native_type",
+        "canonical_type",
+        "nullable",
+        "default",
+        "description"
+      ],
+      "title": "ColumnMeta",
+      "type": "object"
+    },
+    "ForeignKeyMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "referenced_schema": {
+          "title": "Referenced Schema",
+          "type": "string"
+        },
+        "referenced_table": {
+          "title": "Referenced Table",
+          "type": "string"
+        },
+        "referenced_columns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Referenced Columns",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "columns",
+        "referenced_schema",
+        "referenced_table",
+        "referenced_columns"
+      ],
+      "title": "ForeignKeyMeta",
+      "type": "object"
+    },
+    "IndexMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "definition": {
+          "title": "Definition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "definition"
+      ],
+      "title": "IndexMeta",
+      "type": "object"
+    },
+    "SourceInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "dialect": {
+          "enum": [
+            "postgresql",
+            "mysql",
+            "sqlserver",
+            "oracle",
+            "sqlite"
+          ],
+          "title": "Dialect",
+          "type": "string"
+        },
+        "database": {
+          "title": "Database",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "dialect",
+        "database"
+      ],
+      "title": "SourceInfo",
+      "type": "object"
+    },
+    "TableMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "schema_name": {
+          "title": "Schema Name",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Description"
+        },
+        "business_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Business Names",
+          "type": "array"
+        },
+        "estimated_rows": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Estimated Rows"
+        },
+        "columns": {
+          "items": {
+            "$ref": "#/$defs/ColumnMeta"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "primary_key": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Primary Key",
+          "type": "array"
+        },
+        "foreign_keys": {
+          "items": {
+            "$ref": "#/$defs/ForeignKeyMeta"
+          },
+          "title": "Foreign Keys",
+          "type": "array"
+        },
+        "indexes": {
+          "items": {
+            "$ref": "#/$defs/IndexMeta"
+          },
+          "title": "Indexes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "schema_name",
+        "name",
+        "description",
+        "estimated_rows",
+        "columns",
+        "primary_key",
+        "foreign_keys",
+        "indexes"
+      ],
+      "title": "TableMeta",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "catalog_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Catalog Version",
+      "type": "string"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/SourceInfo"
+    },
+    "tables": {
+      "items": {
+        "$ref": "#/$defs/TableMeta"
+      },
+      "title": "Tables",
+      "type": "array"
+    }
+  },
+  "required": [
+    "generated_at",
+    "source",
+    "tables"
+  ],
+  "title": "UnifiedCatalog",
+  "type": "object"
+}

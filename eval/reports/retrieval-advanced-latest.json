@@ -1,0 +1,1796 @@
+{
+  "top_k": 8,
+  "total": 65,
+  "passed": 65,
+  "recall_accuracy": 1.0,
+  "by_category": {
+    "entity_resolution": {
+      "total": 12,
+      "passed": 12
+    },
+    "time": {
+      "total": 14,
+      "passed": 14
+    },
+    "comparison": {
+      "total": 10,
+      "passed": 10
+    },
+    "multi_filter": {
+      "total": 12,
+      "passed": 12
+    },
+    "retrieval": {
+      "total": 15,
+      "passed": 15
+    },
+    "ambiguity": {
+      "total": 2,
+      "passed": 2
+    }
+  },
+  "failures": [],
+  "results": [
+    {
+      "id": "advanced_001",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "查询2025年15号测试商品销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_year",
+          "product"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "product",
+        "order_year",
+        "customer",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_002",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "测试商品1去年卖了多少钱",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date",
+          "product"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "product",
+        "order_date",
+        "customer",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_003",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "办公类商品2025年的销量",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "category",
+          "order_year"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "order_year",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_004",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "支付宝产生了多少条支付记录",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "payment_count",
+        "sold_quantity",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_005",
+      "split": "validation",
+      "category": "entity_resolution",
+      "question": "微信支付去年有多少次付款",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "order_date",
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity",
+        "payment_count",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_status",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_006",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "已退款订单的销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_status"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity",
+        "order_count",
+        "order_amount",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_status",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_007",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "华东地区2025年的平均客单价",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "order_year",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "avg_unit_price"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_year"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_008",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "测试客户20去年的成交订单数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "customer",
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "avg_unit_price",
+        "customer_count",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "customer",
+        "order_date",
+        "product",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_009",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "华南区域电子类商品的成交额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "category",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "avg_unit_price",
+        "order_count"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "region",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_010",
+      "split": "validation",
+      "category": "entity_resolution",
+      "question": "银行卡支付对应的订单数量",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "sold_quantity",
+        "payment_count",
+        "order_amount",
+        "max_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_status",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_011",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "信用卡付款的支付次数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "payment_count"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_012",
+      "split": "dev",
+      "category": "entity_resolution",
+      "question": "已取消订单的订单总额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_amount"
+        ],
+        "dimensions": [
+          "order_status"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_amount",
+        "order_count",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_status",
+        "order_id",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_013",
+      "split": "dev",
+      "category": "time",
+      "question": "去年华东地区的销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_014",
+      "split": "dev",
+      "category": "time",
+      "question": "本季度一共有多少成交订单",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "sales_amount",
+        "avg_unit_price",
+        "sold_quantity",
+        "order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_date",
+        "order_quarter",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_015",
+      "split": "validation",
+      "category": "time",
+      "question": "上季度办公用品销量",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "category",
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "order_date",
+        "order_quarter"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_016",
+      "split": "dev",
+      "category": "time",
+      "question": "最近30天有多少位购买客户",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "customer_count"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "customer_count",
+        "sold_quantity",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_date",
+        "customer",
+        "region"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_017",
+      "split": "dev",
+      "category": "time",
+      "question": "最近三个月的平均订单金额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "max_order_amount",
+        "order_amount",
+        "avg_unit_price",
+        "order_count",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_date",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_018",
+      "split": "dev",
+      "category": "time",
+      "question": "2025年2月销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_year"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_019",
+      "split": "dev",
+      "category": "time",
+      "question": "2025年第四季度订单数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "order_amount",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "order_year",
+        "order_date",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_020",
+      "split": "validation",
+      "category": "time",
+      "question": "2025年1月至3月成交额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "avg_unit_price",
+        "order_count"
+      ],
+      "retrieved_dimensions": [
+        "order_year"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_021",
+      "split": "dev",
+      "category": "time",
+      "question": "2024年11月至2025年2月销售数量",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_year"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_022",
+      "split": "dev",
+      "category": "time",
+      "question": "上个月支付宝支付次数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "order_date",
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "payment_count"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_date",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_023",
+      "split": "dev",
+      "category": "time",
+      "question": "今年每个季度的客户数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "customer_count"
+        ],
+        "dimensions": [
+          "order_date",
+          "order_quarter"
+        ]
+      },
+      "retrieved_metrics": [
+        "customer_count"
+      ],
+      "retrieved_dimensions": [
+        "order_date",
+        "order_quarter",
+        "customer",
+        "region",
+        "order_year"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_024",
+      "split": "dev",
+      "category": "time",
+      "question": "2025年每月平均订单金额趋势",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "order_month",
+          "order_year"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "max_order_amount",
+        "order_amount",
+        "avg_unit_price",
+        "order_count"
+      ],
+      "retrieved_dimensions": [
+        "order_year",
+        "order_month",
+        "order_quarter"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_025",
+      "split": "validation",
+      "category": "time",
+      "question": "最近7天销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_026",
+      "split": "dev",
+      "category": "time",
+      "question": "2024年第一季度到第二季度的销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "order_year",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_027",
+      "split": "dev",
+      "category": "comparison",
+      "question": "去年销售额同比增长多少",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity",
+        "avg_order_amount",
+        "max_order_amount",
+        "order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_028",
+      "split": "dev",
+      "category": "comparison",
+      "question": "去年成交订单数同比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "avg_unit_price",
+        "sales_amount",
+        "order_amount",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_date",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_029",
+      "split": "dev",
+      "category": "comparison",
+      "question": "2025年第一季度销售额环比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "order_year",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_030",
+      "split": "validation",
+      "category": "comparison",
+      "question": "2025年第四季度客户数同比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "customer_count"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "customer_count",
+        "order_count",
+        "payment_count"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "order_year",
+        "customer",
+        "order_date",
+        "region"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_031",
+      "split": "dev",
+      "category": "comparison",
+      "question": "最近30天订单数环比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "order_amount",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_date",
+        "order_id",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_032",
+      "split": "dev",
+      "category": "comparison",
+      "question": "最近三个月平均客单价环比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "avg_unit_price"
+      ],
+      "retrieved_dimensions": [
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_033",
+      "split": "dev",
+      "category": "comparison",
+      "question": "2025年1月至3月销售额环比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_year"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_034",
+      "split": "dev",
+      "category": "comparison",
+      "question": "华东地区去年销售额同比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity",
+        "avg_order_amount",
+        "max_order_amount",
+        "order_amount"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_035",
+      "split": "validation",
+      "category": "comparison",
+      "question": "办公用品2025年第二季度销量同比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "category",
+          "order_date"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "category",
+        "order_year",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_036",
+      "split": "dev",
+      "category": "comparison",
+      "question": "支付宝上个月支付次数环比",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "order_date",
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "payment_count"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_date",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_037",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "2025年华东和华南销售额最高的5个商品",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_year",
+          "product",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity",
+        "max_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_year",
+        "product",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_038",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "2024年办公用品销量最低的三个商品",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "category",
+          "order_year",
+          "product"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "order_year",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_039",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "2025年华北地区各月份订单数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "order_month",
+          "order_year",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "order_amount",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_month",
+        "order_year",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_040",
+      "split": "validation",
+      "category": "multi_filter",
+      "question": "去年华南电子产品的销售数量",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "category",
+          "order_date",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "region",
+        "order_date",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_041",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "2025年退款订单中金额最高的订单",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "max_order_amount"
+        ],
+        "dimensions": [
+          "order_status",
+          "order_year"
+        ]
+      },
+      "retrieved_metrics": [
+        "max_order_amount",
+        "avg_order_amount",
+        "order_amount",
+        "order_count",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_status",
+        "order_year",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_042",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "华东地区各商品类别的购买客户数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "customer_count"
+        ],
+        "dimensions": [
+          "category",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "customer_count"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "region",
+        "customer",
+        "product",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_043",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "2025年使用支付宝或微信的支付次数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "order_year",
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "payment_count"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_year",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_044",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "测试客户_12在2025年的平均订单金额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "customer",
+          "order_year"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "max_order_amount",
+        "order_amount",
+        "avg_unit_price",
+        "customer_count"
+      ],
+      "retrieved_dimensions": [
+        "customer",
+        "order_year",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_045",
+      "split": "validation",
+      "category": "multi_filter",
+      "question": "2025年第二季度华东地区成交订单数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "order_date",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "avg_unit_price",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "region",
+        "order_year",
+        "order_date",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_046",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "2024到2025年各地区销售额排名",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_date",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "order_year",
+        "region"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_047",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "已支付订单中平均成交单价最高的商品类别",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_unit_price"
+        ],
+        "dimensions": [
+          "category",
+          "order_status"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_unit_price",
+        "avg_order_amount",
+        "max_order_amount",
+        "order_count",
+        "payment_count"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "order_status",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_048",
+      "split": "dev",
+      "category": "multi_filter",
+      "question": "去年西南地区销量前五的商品",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "order_date",
+          "product",
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "product",
+        "order_date",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_049",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "各区域GMV排行",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "region"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_050",
+      "split": "validation",
+      "category": "retrieval",
+      "question": "按品类看售出件数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "category"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_051",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "付款渠道分别有多少支付",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity",
+        "payment_count",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_052",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "不同客户区域的平均客单价",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "avg_unit_price",
+        "customer_count"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "customer"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_053",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "每年有多少购买用户",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "customer_count"
+        ],
+        "dimensions": [
+          "order_year"
+        ]
+      },
+      "retrieved_metrics": [
+        "customer_count",
+        "sold_quantity",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_year",
+        "customer",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_054",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "成交金额最高的产品",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ]
+      },
+      "retrieved_metrics": [
+        "max_order_amount",
+        "sales_amount",
+        "avg_unit_price",
+        "avg_order_amount",
+        "order_count",
+        "order_amount"
+      ],
+      "retrieved_dimensions": [
+        "product",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_055",
+      "split": "validation",
+      "category": "retrieval",
+      "question": "订单量最大的区域",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "max_order_amount",
+        "order_count",
+        "order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_id",
+        "order_status",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_056",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "每季度GMV走势",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_quarter"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_quarter",
+        "order_date"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_057",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "商品分类的成交单价均值",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_unit_price"
+        ],
+        "dimensions": [
+          "category"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_unit_price",
+        "avg_order_amount",
+        "order_count",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_058",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "最高一笔订单是多少钱",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "max_order_amount"
+        ],
+        "dimensions": []
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "max_order_amount",
+        "sold_quantity",
+        "order_count",
+        "order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "order_id",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_059",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "不同付款方式对应多少笔记录",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "payment_count"
+        ],
+        "dimensions": [
+          "payment_method"
+        ]
+      },
+      "retrieved_metrics": [
+        "payment_count",
+        "sold_quantity",
+        "sales_amount"
+      ],
+      "retrieved_dimensions": [
+        "payment_method",
+        "order_status"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_060",
+      "split": "validation",
+      "category": "retrieval",
+      "question": "区域维度统计成交订单量",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "region"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "avg_unit_price",
+        "sales_amount",
+        "order_amount",
+        "max_order_amount",
+        "avg_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "region",
+        "order_id"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_061",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "按月观察客单价变化",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "avg_order_amount"
+        ],
+        "dimensions": [
+          "order_month"
+        ]
+      },
+      "retrieved_metrics": [
+        "avg_order_amount",
+        "avg_unit_price"
+      ],
+      "retrieved_dimensions": [
+        "order_month"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_062",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "产品类别的用户覆盖数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "customer_count"
+        ],
+        "dimensions": [
+          "category"
+        ]
+      },
+      "retrieved_metrics": [
+        "customer_count"
+      ],
+      "retrieved_dimensions": [
+        "category",
+        "customer",
+        "product"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_063",
+      "split": "dev",
+      "category": "retrieval",
+      "question": "售出数量最多的产品前十",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [
+          "product"
+        ]
+      },
+      "retrieved_metrics": [
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "product",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_064",
+      "split": "dev",
+      "category": "ambiguity",
+      "question": "测试商品的销售额",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ]
+      },
+      "retrieved_metrics": [
+        "sales_amount",
+        "sold_quantity"
+      ],
+      "retrieved_dimensions": [
+        "product",
+        "customer",
+        "category"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    },
+    {
+      "id": "advanced_065",
+      "split": "validation",
+      "category": "ambiguity",
+      "question": "测试客户的订单数",
+      "passed": true,
+      "expected": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [
+          "customer"
+        ]
+      },
+      "retrieved_metrics": [
+        "order_count",
+        "customer_count",
+        "order_amount",
+        "max_order_amount"
+      ],
+      "retrieved_dimensions": [
+        "customer",
+        "product",
+        "order_id",
+        "region"
+      ],
+      "missing_metrics": [],
+      "missing_dimensions": []
+    }
+  ]
+}

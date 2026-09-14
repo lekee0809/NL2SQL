@@ -1,0 +1,69 @@
+{
+  "split": "all",
+  "total": 1,
+  "passed": 1,
+  "strict_passed": 1,
+  "execution_accuracy": 1.0,
+  "strict_execution_accuracy": 1.0,
+  "average_latency_ms": 4191.3,
+  "by_category": {
+    "entity_resolution": {
+      "total": 1,
+      "passed": 1
+    }
+  },
+  "results": [
+    {
+      "id": "scenario_002",
+      "passed": true,
+      "strict_passed": true,
+      "status": 200,
+      "latency_ms": 4191.3,
+      "sql": "SELECT SUM(oi.quantity) AS \"销售数量\" FROM orders AS o JOIN order_items AS oi ON oi.order_id = o.id JOIN products AS p ON p.id = oi.product_id WHERE (CAST(EXTRACT(YEAR FROM o.created_at) AS INT) = %s) AND (p.name = %s) AND (o.status = %s) LIMIT 200",
+      "parameters": [
+        "2025",
+        "极光键盘-专业版",
+        "PAID"
+      ],
+      "query_spec": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": []
+          },
+          {
+            "field": "product",
+            "operator": "eq",
+            "value": "极光键盘-专业版",
+            "values": []
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "resolutions": [
+        {
+          "field": "product",
+          "requested": "极光键盘专业版",
+          "resolved": "极光键盘-专业版",
+          "score": 1.0,
+          "method": "exact"
+        }
+      ],
+      "predicted_rows": 1,
+      "expected_rows": 1,
+      "error": null,
+      "question": "2025年极光键盘专业版卖出了多少件",
+      "split": "scenario",
+      "category": "entity_resolution",
+      "difficulty": "medium"
+    }
+  ]
+}
