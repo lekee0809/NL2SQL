@@ -26,6 +26,8 @@ class Settings:
     max_result_rows: int = int(os.getenv("MAX_RESULT_ROWS", "200"))
     catalog_retrieval_enabled: bool = env_bool("CATALOG_RETRIEVAL_ENABLED", False)
     catalog_retrieval_top_k: int = int(os.getenv("CATALOG_RETRIEVAL_TOP_K", "10"))
+    session_ttl_seconds: int = int(os.getenv("SESSION_TTL_SECONDS", "3600"))
+    default_source_id: str = os.getenv("DEFAULT_SOURCE_ID", "analytics_local")
 
 
 settings = Settings()

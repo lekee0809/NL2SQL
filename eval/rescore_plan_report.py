@@ -1,3 +1,4 @@
+import argparse
 import json
 from pathlib import Path
 
@@ -8,11 +9,20 @@ ROOT = Path(__file__).resolve().parent
 
 
 def main():
+    parser = argparse.ArgumentParser(description="不调用模型，重新评分已有 QuerySpec 报告")
+    parser.add_argument(
+        "--report", default="query-spec-retrieval-selected-latest.json",
+        help="eval/reports 下的报告文件名",
+    )
+    args = parser.parse_args()
+    report_name = Path(args.report)
+    if report_name.name != args.report or report_name.suffix != ".json":
+        parser.error("--report 必须是单个 .json 文件名")
     cases = {
         case["id"]: case
         for case in json.loads((ROOT / "advanced_cases.json").read_text(encoding="utf-8"))
     }
-    path = ROOT / "reports" / "query-spec-retrieval-selected-latest.json"
+    path = ROOT / "reports" / report_name
     report = json.loads(path.read_text(encoding="utf-8"))
     for result in report["results"]:
         if result.get("actual_spec") is None:

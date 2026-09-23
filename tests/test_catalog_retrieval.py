@@ -2,6 +2,7 @@ from app.catalog_models import RagDocument
 import pytest
 
 from app.catalog_retrieval import CatalogRetriever, DEFAULT_DOCUMENTS_PATH, _tokens
+import app.catalog_retrieval as catalog_retrieval
 from app.llm import build_prompt_catalog
 from app.query_spec import compact_catalog
 
@@ -62,6 +63,21 @@ def test_document_type_filter_excludes_columns():
 
 def test_source_filter_can_exclude_all_documents():
     assert retriever().search("销售额", source_id="other") == []
+
+
+def test_document_ngrams_are_built_once(monkeypatch):
+    index = retriever()
+    original = catalog_retrieval._ngrams
+    calls = []
+
+    def track(text, size=2):
+        calls.append(text)
+        return original(text, size)
+
+    monkeypatch.setattr(catalog_retrieval, "_ngrams", track)
+    assert index.search("销售额")
+    assert index.search("客户数")
+    assert calls == ["销售额", "客户数"]
 
 
 @pytest.mark.parametrize(

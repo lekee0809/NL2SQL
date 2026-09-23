@@ -26,6 +26,45 @@ class FilterSpec(BaseModel):
     operator: FilterOperator
     value: str
     values: list[str]
+    entity_id: int | None = Field(default=None, gt=0)
+
+    @model_validator(mode="after")
+    def validate_operator_values(self):
+        if self.entity_id is not None and (self.field not in {"product", "customer"} or self.operator != "eq"):
+            raise ValueError("entity_id 只可用于商品或客户的精确过滤")
+        scalar_operators = {"eq", "neq", "contains", "gte", "lte", "year", "calendar_month", "calendar_quarter"}
+        range_operators = {"between", "month_range"}
+        empty_relative_operators = {
+            "this_year", "last_year", "this_month", "last_month",
+            "this_quarter", "last_quarter",
+        }
+        if self.operator in scalar_operators:
+            if not self.value or self.values:
+                raise ValueError(f"{self.operator} 需要非空 value 且 values 必须为空")
+        elif self.operator == "in":
+            if self.value or not self.values:
+                raise ValueError("in 需要空 value 和非空 values")
+        elif self.operator in range_operators:
+            if self.value or len(self.values) != 2:
+                raise ValueError(f"{self.operator} 需要空 value 和两个 values")
+        elif self.operator in empty_relative_operators:
+            if self.value or self.values:
+                raise ValueError(f"{self.operator} 的 value 和 values 必须为空")
+        elif self.operator in {"last_n_days", "last_n_months"}:
+            if not self.value.isdigit() or self.values:
+                raise ValueError(f"{self.operator} 需要数字 value 且 values 必须为空")
+
+        if self.operator == "year" and not re.fullmatch(r"\d{4}", self.value):
+            raise ValueError("year 需要四位年份")
+        if self.operator == "calendar_month" and not re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])", self.value):
+            raise ValueError("calendar_month 需要合法的 YYYY-MM")
+        if self.operator == "calendar_quarter" and not re.fullmatch(r"\d{4}-Q[1-4]", self.value.upper()):
+            raise ValueError("calendar_quarter 需要 YYYY-Q1 至 YYYY-Q4")
+        if self.operator == "month_range" and not all(
+            re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])", value) for value in self.values
+        ):
+            raise ValueError("month_range 需要两个合法的 YYYY-MM")
+        return self
 
 
 class OrderSpec(BaseModel):
@@ -87,6 +126,10 @@ def query_spec_json_schema() -> dict:
     schema["properties"]["metrics"]["items"]["enum"] = sorted(METRICS)
     schema["properties"]["dimensions"]["items"]["enum"] = sorted(DIMENSIONS)
     schema["$defs"]["FilterSpec"]["properties"]["field"]["enum"] = sorted(DIMENSIONS)
+    schema["$defs"]["FilterSpec"]["properties"].pop("entity_id", None)
+    schema["$defs"]["FilterSpec"]["required"] = [
+        name for name in schema["$defs"]["FilterSpec"].get("required", []) if name != "entity_id"
+    ]
     schema["$defs"]["OrderSpec"]["properties"]["field"]["enum"] = sorted(set(METRICS) | set(DIMENSIONS))
     return schema
 
@@ -207,6 +250,9 @@ def _date_range(item: FilterSpec, reference_date: date) -> tuple[date, date] | N
 
 
 def _compile_filter(item: FilterSpec, reference_date: date) -> tuple[str, list[object]]:
+    if item.entity_id is not None:
+        expression = "p.id" if item.field == "product" else "c.id"
+        return f"{expression} = %s", [item.entity_id]
     expression = DIMENSIONS[item.field]["expression"]
     value_type = DIMENSIONS[item.field]["value_type"]
     date_range = _date_range(item, reference_date)

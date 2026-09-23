@@ -42,3 +42,79 @@
   color: #8dd3be;
   font-size: 24px;
 }
+
+.session-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 4px;
+  color: #176b5b;
+  font-size: 13px;
+}
+
+.session-bar button {
+  border: 1px solid #c8ded4;
+  border-radius: 7px;
+  background: #f3faf6;
+  color: #176b5b;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.turns { margin-top: 18px; display: grid; gap: 8px; }
+.turn-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 15px;
+  border: 1px solid #e5e9e7;
+  border-radius: 10px;
+  background: white;
+  font-size: 13px;
+}
+.turn-item strong { font-weight: 500; overflow-wrap: anywhere; }
+.turn-item span { color: #66727f; white-space: nowrap; }
+.query-meta { margin: 0 26px 14px; color: #66727f; font-size: 12px; }
+
+.chart-controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+.chart-controls label { display: flex; align-items: center; gap: 8px; color: #66727f; font-size: 13px; }
+.chart-controls select { max-width: 220px; border: 1px solid #dce5e0; border-radius: 8px; padding: 7px 10px; background: white; color: #17212b; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 12px; }
+.kpi-card { display: flex; flex-direction: column; gap: 12px; border: 1px solid #dce9e2; border-radius: 12px; padding: 20px; background: #f5faf7; }
+.kpi-card span { color: #66727f; font-size: 13px; }
+.kpi-card strong { color: #176b5b; font-size: clamp(24px,3vw,36px); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.viz-bars { display: grid; gap: 14px; }
+.viz-bar-row { display: grid; grid-template-columns: minmax(110px,190px) minmax(90px,1fr) minmax(65px,110px); align-items: center; gap: 12px; font-size: 13px; }
+.viz-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.viz-track { position: relative; height: 22px; border-radius: 5px; background: #edf3ef; overflow: hidden; }
+.viz-zero { position: absolute; top: 0; bottom: 0; width: 1px; background: #64756d; z-index: 1; }
+.viz-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 4px; background: #42a383; }
+.viz-fill.negative { background: #dc816d; }
+.viz-bar-row strong { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
+.viz-hint { color: #66727f; font-size: 12px; margin: 14px 0 0; }
+.viz-line-wrap { display: grid; grid-template-columns: 60px minmax(0,1fr); height: 260px; gap: 8px; }
+.viz-scale { display: flex; flex-direction: column; justify-content: space-between; padding: 20px 0; color: #66727f; font-size: 12px; text-align: right; }
+.viz-line { width: 100%; height: 100%; overflow: visible; background: repeating-linear-gradient(to bottom,#f2f6f3 0,#f2f6f3 1px,transparent 1px,transparent 25%); }
+.viz-line polyline { fill: none; stroke: #176b5b; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+.viz-line circle { fill: #176b5b; stroke: white; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.viz-axis { display: flex; justify-content: space-between; gap: 5px; margin-left: 68px; color: #66727f; font-size: 11px; }
+.viz-axis span { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.viz-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 36px; }
+.viz-donut { width: 210px; height: 210px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+.viz-donut>div { width: 135px; height: 135px; background: white; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.viz-donut strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+.viz-donut span { color: #66727f; font-size: 12px; }
+.viz-legend { display: grid; gap: 10px; min-width: min(280px,100%); }
+.viz-legend>div { display: grid; grid-template-columns: 10px minmax(90px,1fr) 55px 70px; align-items: center; gap: 9px; font-size: 13px; }
+.viz-legend i { width: 9px; height: 9px; border-radius: 50%; }
+.viz-legend span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.viz-legend strong,.viz-legend small { text-align: right; font-variant-numeric: tabular-nums; }
+.viz-legend small { color: #66727f; }
+
+@media (max-width: 600px) {
+  .turn-item { display: block; }
+  .turn-item span { display: block; margin-top: 6px; }
+  .viz-bar-row { grid-template-columns: minmax(75px,100px) minmax(70px,1fr) 65px; gap: 6px; font-size: 11px; }
+  .viz-line-wrap { grid-template-columns: 45px minmax(0,1fr); height: 210px; }
+  .viz-axis { margin-left: 53px; }
+}

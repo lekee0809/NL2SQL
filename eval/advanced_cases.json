@@ -466,7 +466,7 @@
         {
           "field": "region",
           "operator": "eq",
-          "value": "华东",
+          "value": "华东地区",
           "values": []
         }
       ],
@@ -1222,7 +1222,7 @@
         {
           "field": "region",
           "operator": "eq",
-          "value": "华东",
+          "value": "华东地区",
           "values": []
         }
       ],

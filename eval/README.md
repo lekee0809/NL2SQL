@@ -34,4 +34,18 @@ python -m eval.run_retrieval_eval
 
 上述命令不会调用模型。检索报告写入 `eval/reports/retrieval-advanced-latest.json`。
 
-少量检索模式 QuerySpec 抽查使用 `eval/run_plan_eval.py --id ...`。它会调用模型，只应传入少量代表题；已有报告可通过 `eval/rescore_plan_report.py` 在修正标注后离线重评分。
+少量检索模式 QuerySpec 抽查使用 `python -m eval.run_plan_eval --id ...`。它会调用模型，只应传入少量代表题；已有报告可通过 `python -m eval.rescore_plan_report --report 报告名.json` 在修正标注后离线重评分。
+
+评测器默认最多调用模型 5 次，超过会直接拒绝；可在 1～10 范围内显式调整。针对单个回归问题时建议写入独立报告，避免覆盖已有抽样结果：
+
+```powershell
+python -m eval.run_plan_eval --id advanced_001 --max-api-calls 1 --output regression-advanced-001.json
+```
+
+多轮联网冒烟测试固定包含 3 个首轮问题、2 个复杂模型续问和 2 个本地续问，模型调用硬上限为 5：
+
+```powershell
+python -m eval.run_conversation_live_eval --max-api-calls 5
+```
+
+最近一次结果：5 次模型调用，3373 input token、619 output token、3992 total token；严格通过 6/7。唯一失败是明确地区被生成为 `contains` 而非 `eq`，已加入提示词回归规则，未为此追加联网调用。

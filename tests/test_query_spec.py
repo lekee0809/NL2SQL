@@ -79,3 +79,18 @@ def test_model_schema_ids_are_generated_from_business_dictionary():
     assert set(schema["properties"]["metrics"]["items"]["enum"]) == set(METRICS)
     assert set(schema["properties"]["dimensions"]["items"]["enum"]) == set(DIMENSIONS)
     assert set(schema["$defs"]["FilterSpec"]["properties"]["field"]["enum"]) == set(DIMENSIONS)
+
+
+@pytest.mark.parametrize(
+    "filter_data",
+    [
+        {"field": "order_year", "operator": "calendar_month", "value": "2025-15", "values": []},
+        {"field": "product", "operator": "eq", "value": "", "values": []},
+        {"field": "region", "operator": "in", "value": "", "values": []},
+        {"field": "order_date", "operator": "month_range", "value": "", "values": ["2025-01"]},
+        {"field": "order_date", "operator": "last_n_days", "value": "很多", "values": []},
+    ],
+)
+def test_invalid_filter_operator_value_combinations_are_rejected(filter_data):
+    with pytest.raises(ValueError):
+        make_spec(filters=[filter_data])

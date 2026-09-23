@@ -6,6 +6,7 @@ from functools import lru_cache
 from typing import Callable
 
 from .database import fetch_distinct_text_values
+from .entity_aliases import EntityMatch, lookup_alias, lookup_name
 from .query_spec import DIMENSIONS, QuerySpec
 
 
@@ -123,17 +124,45 @@ def infer_entity_dimensions(
 def resolve_query_spec(
     spec: QuerySpec,
     loader: Callable[[str], tuple[str, ...]] = _load_candidates,
+    alias_lookup: Callable[[str, str], list[EntityMatch]] | None = None,
+    name_lookup: Callable[[str, str], list[EntityMatch]] | None = None,
 ) -> tuple[QuerySpec, list[Resolution]]:
+    if alias_lookup is None and loader is _load_candidates:
+        alias_lookup = lookup_alias
+    if name_lookup is None and loader is _load_candidates:
+        name_lookup = lookup_name
     data = spec.model_dump()
     resolutions: list[Resolution] = []
     for index, item in enumerate(spec.filters):
         if item.operator != "eq" or item.field not in VALUE_SOURCES or not item.value.strip():
             continue
+        if item.entity_id is not None:
+            continue  # A previously confirmed entity stays pinned across follow-ups.
         requested = item.value.strip()
+        if item.field in {"product", "customer"} and alias_lookup is not None:
+            matches = alias_lookup(item.field, requested)
+            if len(matches) > 1:
+                candidates = [{"value": match.value, "entity_id": match.entity_id, "score": 1.0}
+                              for match in matches]
+                raise NeedsClarification(index, item.field, requested, candidates, spec)
+            if len(matches) == 1:
+                match = matches[0]
+                data["filters"][index].update(value=match.value, entity_id=match.entity_id)
+                resolutions.append(Resolution(item.field, requested, match.value, 1.0, "entity_alias"))
+                continue
         loaded = loader(item.field)
         alias_target = _resolve_alias(requested, item.field, loaded)
         if alias_target is not None:
             data["filters"][index]["value"] = alias_target
+            if item.field in {"product", "customer"} and name_lookup is not None:
+                matches = name_lookup(item.field, alias_target)
+                if len(matches) > 1:
+                    raise NeedsClarification(index, item.field, requested, [
+                        {"value": match.value, "entity_id": match.entity_id, "score": 1.0}
+                        for match in matches
+                    ], spec)
+                if matches:
+                    data["filters"][index]["entity_id"] = matches[0].entity_id
             resolutions.append(Resolution(
                 field=item.field,
                 requested=requested,
@@ -151,6 +180,15 @@ def resolve_query_spec(
         best_value, best_score = ranked[0]
         runner_up = ranked[1][1] if len(ranked) > 1 else 0.0
         if best_score == 1.0 or (best_score >= 0.86 and best_score - runner_up >= 0.08):
+            if item.field in {"product", "customer"} and name_lookup is not None:
+                matches = name_lookup(item.field, best_value)
+                if len(matches) > 1:
+                    raise NeedsClarification(index, item.field, requested, [
+                        {"value": match.value, "entity_id": match.entity_id, "score": round(best_score, 3)}
+                        for match in matches
+                    ], spec)
+                if matches:
+                    data["filters"][index]["entity_id"] = matches[0].entity_id
             data["filters"][index]["value"] = best_value
             if requested != best_value:
                 resolutions.append(Resolution(

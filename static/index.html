@@ -29,11 +29,14 @@
       <header><div><p class="eyebrow">ANALYTICS COPILOT</p><h1>用自然语言，直接询问你的数据</h1><p>模型负责理解问题，后端生成安全的只读查询并返回结果。</p></div><div><a href="/admin">数据源管理</a> <a href="/docs" target="_blank">API 文档 ↗</a></div></header>
 
       <section class="ask-card">
+        <div id="sessionBar" class="session-bar hidden"><span id="sessionStatus"></span><button id="newSessionBtn" type="button">开始新查询</button></div>
         <form id="queryForm">
           <textarea id="question" maxlength="500" rows="3" placeholder="例如：2025年华东地区销售额最高的三个商品"></textarea>
           <div class="ask-actions"><span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 发送</span><button id="submitBtn" type="submit"><span>开始查询</span><b>→</b></button></div>
         </form>
       </section>
+
+      <section id="turns" class="turns hidden" aria-label="查询记录"></section>
 
       <section id="welcome" class="welcome">
         <div class="welcome-icon">✦</div><h2>从一个问题开始</h2><p>选择左侧示例，或者用自己的方式描述想看的数据。</p>
@@ -44,10 +47,12 @@
 
       <section id="result" class="result hidden">
         <div class="result-head"><div><p class="eyebrow">QUERY RESULT</p><h2 id="resultTitle"></h2></div><div id="rowCount" class="badge"></div></div>
+        <p id="queryMeta" class="query-meta"></p>
+        <div id="changeNotice" class="resolution-notice hidden"></div>
         <div id="resolutionNotice" class="resolution-notice hidden"></div>
         <div class="tabs"><button class="tab active" data-tab="tablePanel">数据表格</button><button class="tab" data-tab="chartPanel">图表</button><button class="tab" data-tab="sqlPanel">生成的 SQL</button></div>
         <div id="tablePanel" class="panel active"><div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
-        <div id="chartPanel" class="panel"><div id="chart" class="chart"></div></div>
+        <div id="chartPanel" class="panel"><div id="chartControls" class="chart-controls hidden"><label>指标 <select id="metricSelect" aria-label="图表指标"></select></label><label>展示方式 <select id="chartMode" aria-label="图表展示方式"></select></label></div><div id="chart" class="chart"></div></div>
         <div id="sqlPanel" class="panel"><pre><code id="sqlCode"></code></pre><button id="copySql" class="copy-btn">复制 SQL</button></div>
       </section>
 

@@ -67,6 +67,7 @@ class CatalogRetriever:
     def __init__(self, documents: list[RagDocument]):
         self.documents = documents
         self.token_counts = [Counter(_tokens(f"{item.title} {item.text}")) for item in documents]
+        self.document_grams = [_ngrams(f"{item.title} {item.text}") for item in documents]
         self.lengths = [sum(counts.values()) for counts in self.token_counts]
         self.average_length = sum(self.lengths) / max(len(self.lengths), 1)
         document_frequency: Counter[str] = Counter()
@@ -124,8 +125,7 @@ class CatalogRetriever:
             if source_id and document.source_id != source_id:
                 continue
             lexical = self._bm25(query_tokens, index)
-            document_grams = _ngrams(f"{document.title} {document.text}")
-            overlap = len(query_grams & document_grams) / max(len(query_grams), 1)
+            overlap = len(query_grams & self.document_grams[index]) / max(len(query_grams), 1)
             alias_boost = self._alias_boost(query, document)
             score = lexical + overlap * 2 + alias_boost
             if score > 0:
