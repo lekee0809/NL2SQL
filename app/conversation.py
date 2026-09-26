@@ -328,9 +328,14 @@ class ConversationState(BaseModel):
     session_id: str
     query_spec: QuerySpec
     last_message: str
+    first_message: str | None = None
     turn_count: int = Field(ge=1)
     pending_clarification: dict | None = None
     updated_at: datetime
+
+
+class SessionConflictError(Exception):
+    """The session changed after a caller read it."""
 
 
 class ConversationStore:
@@ -340,12 +345,16 @@ class ConversationStore:
         self,
         ttl_seconds: int = 3600,
         clock: Callable[[], datetime] | None = None,
+        max_sessions: int = 1000,
     ):
         if ttl_seconds < 1:
             raise ValueError("会话过期时间必须大于 0 秒")
+        if max_sessions < 1:
+            raise ValueError("最大会话数必须大于 0")
         self._states: dict[str, ConversationState] = {}
         self._lock = RLock()
         self._ttl_seconds = ttl_seconds
+        self._max_sessions = max_sessions
         self._clock = clock or (lambda: datetime.now(timezone.utc))
 
     def _now(self) -> datetime:
@@ -377,6 +386,7 @@ class ConversationStore:
             session_id=uuid4().hex,
             query_spec=spec,
             last_message=message,
+            first_message=message,
             turn_count=1,
             pending_clarification=pending_clarification,
             updated_at=self._now(),
@@ -384,6 +394,9 @@ class ConversationStore:
         with self._lock:
             self._purge_expired_locked()
             self._states[state.session_id] = state
+            while len(self._states) > self._max_sessions:
+                oldest = min(self._states.values(), key=lambda item: item.updated_at)
+                del self._states[oldest.session_id]
         return state.model_copy(deep=True)
 
     def get(self, session_id: str) -> ConversationState:
@@ -400,16 +413,20 @@ class ConversationStore:
         spec: QuerySpec,
         message: str,
         pending_clarification: dict | None = None,
+        expected_turn_count: int | None = None,
     ) -> ConversationState:
         with self._lock:
             self._purge_expired_locked()
             current = self._states.get(session_id)
             if current is None:
                 raise KeyError("会话不存在或已过期")
+            if expected_turn_count is not None and current.turn_count != expected_turn_count:
+                raise SessionConflictError("会话已在其他页面更新，请刷新后重试")
             updated = ConversationState(
                 session_id=session_id,
                 query_spec=spec,
                 last_message=message,
+                first_message=current.first_message or current.last_message,
                 turn_count=current.turn_count + 1,
                 pending_clarification=pending_clarification,
                 updated_at=self._now(),
@@ -421,3 +438,10 @@ class ConversationStore:
         with self._lock:
             self._purge_expired_locked()
             return self._states.pop(session_id, None) is not None
+
+    def list_recent(self, limit: int = 20) -> list[ConversationState]:
+        with self._lock:
+            self._purge_expired_locked()
+            states = sorted(self._states.values(), key=lambda state: state.updated_at,
+                            reverse=True)
+            return [state.model_copy(deep=True) for state in states[:limit]]

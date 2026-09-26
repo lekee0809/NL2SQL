@@ -29,12 +29,14 @@
       <header><div><p class="eyebrow">ANALYTICS COPILOT</p><h1>用自然语言，直接询问你的数据</h1><p>模型负责理解问题，后端生成安全的只读查询并返回结果。</p></div><div><a href="/admin">数据源管理</a> <a href="/docs" target="_blank">API 文档 ↗</a></div></header>
 
       <section class="ask-card">
-        <div id="sessionBar" class="session-bar hidden"><span id="sessionStatus"></span><button id="newSessionBtn" type="button">开始新查询</button></div>
+        <div id="sessionBar" class="session-bar hidden"><span id="sessionStatus"></span><div><button id="newSessionBtn" type="button">开始新查询</button><button id="deleteSessionBtn" type="button" class="danger-button">删除当前会话</button></div></div>
         <form id="queryForm">
           <textarea id="question" maxlength="500" rows="3" placeholder="例如：2025年华东地区销售额最高的三个商品"></textarea>
           <div class="ask-actions"><span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 发送</span><button id="submitBtn" type="submit"><span>开始查询</span><b>→</b></button></div>
         </form>
       </section>
+
+      <section class="saved-sessions"><div class="saved-header"><span>本机会话 · 默认闲置 1 小时过期</span><button id="refreshSessions" type="button">查看 / 刷新会话</button></div><div id="savedSessionsList" class="saved-list hidden" aria-live="polite"></div></section>
 
       <section id="turns" class="turns hidden" aria-label="查询记录"></section>
 
@@ -51,7 +53,7 @@
         <div id="changeNotice" class="resolution-notice hidden"></div>
         <div id="resolutionNotice" class="resolution-notice hidden"></div>
         <div class="tabs"><button class="tab active" data-tab="tablePanel">数据表格</button><button class="tab" data-tab="chartPanel">图表</button><button class="tab" data-tab="sqlPanel">生成的 SQL</button></div>
-        <div id="tablePanel" class="panel active"><div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
+        <div id="tablePanel" class="panel active"><div class="table-tools"><input id="tableSearch" type="search" placeholder="筛选当前结果" aria-label="筛选当前结果"><span id="tableSummary"></span><button id="downloadCsv" type="button">下载 CSV</button></div><div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
         <div id="chartPanel" class="panel"><div id="chartControls" class="chart-controls hidden"><label>指标 <select id="metricSelect" aria-label="图表指标"></select></label><label>展示方式 <select id="chartMode" aria-label="图表展示方式"></select></label></div><div id="chart" class="chart"></div></div>
         <div id="sqlPanel" class="panel"><pre><code id="sqlCode"></code></pre><button id="copySql" class="copy-btn">复制 SQL</button></div>
       </section>

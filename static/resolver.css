@@ -61,6 +61,19 @@
   cursor: pointer;
 }
 
+.session-bar>div { display: flex; gap: 8px; flex-wrap: wrap; }
+.session-bar .danger-button { background: #fff7f4; border-color: #ecc7bf; color: #9b4235; }
+.saved-sessions { margin: 12px 2px 0; }
+.saved-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #66727f; font-size: 12px; }
+.saved-header button { border: 0; background: transparent; color: #176b5b; cursor: pointer; font: inherit; }
+.saved-list { display: grid; gap: 7px; margin-top: 10px; }
+.saved-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid #e5e9e7; border-radius: 9px; background: white; }
+.saved-item strong { display: block; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.saved-item small { display: block; margin-top: 4px; color: #66727f; }
+.saved-actions { display: flex; gap: 6px; }
+.saved-actions button { border: 1px solid #dce5e0; border-radius: 7px; background: white; padding: 6px 9px; cursor: pointer; color: #176b5b; }
+.saved-actions button:last-child { color: #9b4235; }
+
 .turns { margin-top: 18px; display: grid; gap: 8px; }
 .turn-item {
   display: flex;
@@ -75,6 +88,14 @@
 .turn-item strong { font-weight: 500; overflow-wrap: anywhere; }
 .turn-item span { color: #66727f; white-space: nowrap; }
 .query-meta { margin: 0 26px 14px; color: #66727f; font-size: 12px; }
+
+.table-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.table-tools input { min-width: 180px; flex: 1; max-width: 330px; border: 1px solid #dce5e0; border-radius: 8px; padding: 9px 11px; font: inherit; }
+.table-tools span { color: #66727f; font-size: 12px; margin-right: auto; }
+.table-tools button { border: 1px solid #c8ded4; border-radius: 8px; padding: 8px 12px; background: #f3faf6; color: #176b5b; cursor: pointer; }
+.table-tools button:disabled { opacity: .5; cursor: not-allowed; }
+.sort-heading { color: inherit; font: inherit; font-weight: 600; border: 0; background: transparent; padding: 0; cursor: pointer; text-align: left; }
+.sort-heading:hover { color: #176b5b; }
 
 .chart-controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
 .chart-controls label { display: flex; align-items: center; gap: 8px; color: #66727f; font-size: 13px; }

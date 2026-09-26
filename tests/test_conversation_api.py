@@ -3,6 +3,7 @@ from fastapi import HTTPException
 
 from app import main
 from app.conversation import ConversationStore, QuerySpecPatch
+from app.session_storage import SQLiteConversationStore
 from app.query_spec import QuerySpec
 from app.value_resolver import NeedsClarification
 
@@ -73,6 +74,56 @@ def test_session_api_creates_then_updates_only_mentioned_filter(monkeypatch):
     assert {(item["field"], item["value"]) for item in filters} == {
         ("order_year", "2025"), ("region", "华南")
     }
+
+
+def test_session_api_continues_after_storage_reopen(monkeypatch, tmp_path):
+    path = tmp_path / "sessions.sqlite3"
+    monkeypatch.setattr(main, "conversation_store", SQLiteConversationStore(path))
+    monkeypatch.setattr(main, "generate_query_spec", lambda _, **kwargs: initial_spec())
+    monkeypatch.setattr(main, "execute_query_spec", fake_result)
+    created = main.create_session(main.QueryRequest(question="2025年华东销售额"))
+
+    monkeypatch.setattr(main, "conversation_store", SQLiteConversationStore(path))
+    continued = main.continue_session(
+        created["session_id"], main.QueryRequest(question="改成华南")
+    )
+    assert continued["turn_count"] == 2
+    assert continued["patch_source"] == "local"
+    assert any(item["field"] == "region" and item["value"] == "华南"
+               for item in continued["query_spec"]["filters"])
+
+
+def test_session_list_returns_only_summaries(monkeypatch, tmp_path):
+    store = SQLiteConversationStore(tmp_path / "sessions.sqlite3")
+    monkeypatch.setattr(main, "conversation_store", store)
+    created = store.create(initial_spec(), "2025年华东销售额")
+    store.update(created.session_id, initial_spec(), "换成华南")
+    listed = main.list_sessions()
+    assert len(listed["sessions"]) == 1
+    summary = listed["sessions"][0]
+    assert summary["title"] == "2025年华东销售额"
+    assert summary["turn_count"] == 2
+    assert "query_spec" not in summary
+    assert "last_message" not in summary
+    with pytest.raises(HTTPException) as error:
+        main.list_sessions(51)
+    assert error.value.status_code == 422
+
+
+def test_stale_follow_up_returns_conflict_without_overwriting(monkeypatch, tmp_path):
+    store = SQLiteConversationStore(tmp_path / "sessions.sqlite3")
+    monkeypatch.setattr(main, "conversation_store", store)
+    state = store.create(initial_spec(), "首轮")
+
+    def concurrent_result(spec, question):
+        store.update(state.session_id, initial_spec(), "另一标签页已更新", expected_turn_count=1)
+        return fake_result(spec, question)
+
+    monkeypatch.setattr(main, "execute_query_spec", concurrent_result)
+    with pytest.raises(HTTPException) as error:
+        main.continue_session(state.session_id, main.QueryRequest(question="改成华南"))
+    assert error.value.status_code == 409
+    assert store.get(state.session_id).last_message == "另一标签页已更新"
 
 
 def test_invalid_follow_up_does_not_overwrite_last_valid_state(monkeypatch):

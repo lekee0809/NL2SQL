@@ -14,15 +14,48 @@ function renderHistory(){ const box=$("history"); box.innerHTML=""; historyItems
 function saveHistory(text){ const next=[text,...historyItems().filter(x=>x!==text)].slice(0,8); localStorage.setItem("queryHistory",JSON.stringify(next));renderHistory(); }
 
 async function checkHealth(){
-  try{const r=await fetch("/health");const d=await r.json();const ok=d.api==="ok"&&d.database?.ok;$("statusDot").className=`dot ${ok?'ok':'bad'}`;$("statusText").textContent=ok?`analytics 已连接`:"数据库未连接";}
+  try{const r=await fetch("/health");const d=await r.json();const ok=r.ok&&d.api==="ok"&&d.database?.ok;$("statusDot").className=`dot ${ok?'ok':'bad'}`;$("statusText").textContent=ok?`${d.database.database||"数据库"} 已连接`:"数据库未连接";}
   catch{$("statusDot").className="dot bad";$("statusText").textContent="服务不可用";}
 }
 
+let tableRows = [], sortColumn = null, sortDirection = 1;
+function csvCell(value){
+  let text=String(value ?? "");
+  // Spreadsheet apps may interpret untrusted labels as formulas.
+  if(typeof value==="string"&&/^[\s]*[=+\-@]/.test(text)&&!Number.isFinite(Number(text.trim())))text="'"+text;
+  return `"${text.replace(/"/g,'""')}"`;
+}
+function tableCsv(rows){
+  if(!rows.length)return "\uFEFF";
+  const columns=Object.keys(rows[0]);
+  return "\uFEFF"+[columns,...rows.map(row=>columns.map(key=>row[key]))].map(line=>line.map(csvCell).join(",")).join("\r\n");
+}
+function visibleTableRows(){
+  const query=$("tableSearch").value.trim().toLocaleLowerCase("zh-CN");
+  const rows=tableRows.filter(row=>!query||Object.values(row).some(value=>String(value ?? "").toLocaleLowerCase("zh-CN").includes(query)));
+  if(!sortColumn)return rows;
+  return rows.sort((a,b)=>{
+    const left=a[sortColumn],right=b[sortColumn];
+    if(left===null||left===undefined||left==="")return right===null||right===undefined||right===""?0:1;
+    if(right===null||right===undefined||right==="")return -1;
+    const x=numberValue(left),y=numberValue(right);
+    return (x!==null&&y!==null?x-y:String(left).localeCompare(String(right),"zh-CN",{numeric:true}))*sortDirection;
+  });
+}
+function renderTableView(){
+  const rows=visibleTableRows(),columns=tableRows.length?Object.keys(tableRows[0]):[];
+  $("tableSummary").textContent=`显示 ${rows.length} / ${tableRows.length} 行（仅当前返回结果）`;
+  $("downloadCsv").disabled=!rows.length;
+  $("tableHead").innerHTML=columns.length?`<tr>${columns.map(c=>`<th><button type="button" class="sort-heading" data-column="${escapeHtml(c)}" aria-label="按${escapeHtml(c)}排序">${escapeHtml(c)}${sortColumn===c?(sortDirection===1?" ↑":" ↓"):""}</button></th>`).join("")}</tr>`:"";
+  $("tableBody").innerHTML=rows.length?rows.map(r=>`<tr>${columns.map(c=>`<td>${escapeHtml(r[c])}</td>`).join("")}</tr>`).join(""):`<tr><td class="empty" colspan="${Math.max(columns.length,1)}">${tableRows.length?"没有符合筛选条件的行":"查询成功，但没有符合条件的数据"}</td></tr>`;
+  $("tableHead").querySelectorAll("button[data-column]").forEach(button=>button.onclick=()=>{
+    const column=button.dataset.column;
+    sortDirection=sortColumn===column?-sortDirection:1;sortColumn=column;renderTableView();
+  });
+}
 function renderTable(rows){
-  if(!rows.length){$("tableHead").innerHTML="";$("tableBody").innerHTML='<tr><td class="empty">查询成功，但没有符合条件的数据</td></tr>';return;}
-  const cols=Object.keys(rows[0]);
-  $("tableHead").innerHTML=`<tr>${cols.map(c=>`<th>${escapeHtml(c)}</th>`).join("")}</tr>`;
-  $("tableBody").innerHTML=rows.map(r=>`<tr>${cols.map(c=>`<td>${escapeHtml(r[c])}</td>`).join("")}</tr>`).join("");
+  tableRows=Array.isArray(rows)?rows:[];sortColumn=null;sortDirection=1;
+  $("tableSearch").value="";renderTableView();
 }
 
 let chartData = null;
@@ -193,6 +226,39 @@ function clearSession(){
   question.value="";show("welcome");question.focus();
 }
 
+async function loadSavedSessions(){
+  if(busy)return;
+  const box=$("savedSessionsList");box.classList.remove("hidden");box.textContent="正在读取本机会话…";
+  try{
+    const response=await fetch("/sessions?limit=20");
+    if(!response.ok)throw new Error("无法读取会话记录");
+    const data=await response.json();box.replaceChildren();
+    if(!data.sessions?.length){box.textContent="没有可恢复的会话。";return;}
+    data.sessions.forEach(item=>{
+      const row=document.createElement("div");row.className="saved-item";
+      const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small");
+      title.textContent=item.title||"未命名会话";
+      const date=new Date(item.updated_at);
+      meta.textContent=`第 ${item.turn_count} 轮 · ${Number.isNaN(date.getTime())?"更新时间未知":date.toLocaleString("zh-CN")}${item.pending_clarification?" · 待确认候选值":""}`;
+      info.append(title,meta);
+      const actions=document.createElement("div");actions.className="saved-actions";
+      const open=document.createElement("button");open.type="button";open.textContent="继续";
+      open.onclick=()=>{if(busy)return;clearSession();updateSession(item.session_id,0);return restoreSession();};
+      const remove=document.createElement("button");remove.type="button";remove.textContent="删除";
+      remove.onclick=async()=>{
+        if(busy||!confirm("确定删除这条会话记忆吗？"))return;
+        try{
+          const result=await fetch(`/sessions/${encodeURIComponent(item.session_id)}`,{method:"DELETE"});
+          if(!result.ok&&result.status!==404)throw new Error("删除会话失败，请重试。");
+          if(sessionId===item.session_id)clearSession();
+          await loadSavedSessions();
+        }catch(e){showError(e.message);}
+      };
+      actions.append(open,remove);row.append(info,actions);box.appendChild(row);
+    });
+  }catch{box.textContent="无法读取会话记录，请检查本机服务。";}
+}
+
 async function runResolved(value,originalQuestion,entityId=null){
   if(busy||!sessionId)return;
   show("loading");setBusy(true);
@@ -232,7 +298,7 @@ async function restoreSession(){
     if(!r.ok){clearSession();showError(r.status===404?"上次会话已过期，请重新开始查询。":"无法恢复上次会话，请重新开始查询。");return;}
     const d=await r.json();pendingClarification=Boolean(d.pending_clarification);
     updateSession(d.session_id,d.turn_count);
-    if(pendingClarification)renderClarification({...d.pending_clarification,session_id:d.session_id,turn_count:d.turn_count},"上次查询");
+    if(pendingClarification)renderClarification({...d.pending_clarification,session_id:d.session_id,turn_count:d.turn_count},d.last_message||"上次查询");
     else{addTurn("已恢复上次会话","可继续追问，历史结果不会在刷新后保留");show("welcome");}
   }catch{clearSession();showError("无法恢复上次会话，请重新开始查询。");}
   finally{setBusy(false);}
@@ -244,7 +310,25 @@ document.querySelectorAll(".example").forEach(b=>b.onclick=()=>{if(busy)return;i
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>activateTab(b.dataset.tab));
 $("metricSelect").onchange=renderSelectedChart;
 $("chartMode").onchange=renderSelectedChart;
+$("tableSearch").oninput=renderTableView;
+$("downloadCsv").onclick=()=>{
+  const rows=visibleTableRows();if(!rows.length)return;
+  const url=URL.createObjectURL(new Blob([tableCsv(rows)],{type:"text/csv;charset=utf-8"}));
+  const link=document.createElement("a");link.href=url;link.download="nl2sql-results.csv";link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),0);
+};
 $("clearHistory").onclick=()=>{localStorage.removeItem("queryHistory");renderHistory()};
 $("copySql").onclick=async()=>{await navigator.clipboard.writeText($("sqlCode").textContent);$("copySql").textContent="已复制";setTimeout(()=>$("copySql").textContent="复制 SQL",1200)};
-$("newSessionBtn").onclick=async()=>{if(busy)return;const old=sessionId;clearSession();if(old)try{await fetch(`/sessions/${encodeURIComponent(old)}`,{method:"DELETE"});}catch{/* Server expiry will clean it up. */}};
+$("refreshSessions").onclick=loadSavedSessions;
+$("newSessionBtn").onclick=()=>{if(!busy)clearSession();};
+$("deleteSessionBtn").onclick=async()=>{
+  if(busy||!sessionId||!confirm("确定删除当前会话记忆吗？"))return;
+  const old=sessionId;
+  try{
+    const response=await fetch(`/sessions/${encodeURIComponent(old)}`,{method:"DELETE"});
+    if(!response.ok&&response.status!==404)throw new Error("删除会话失败，请重试。");
+    clearSession();
+    if(!$("savedSessionsList").classList.contains("hidden"))await loadSavedSessions();
+  }catch(e){showError(e.message);}
+};
 renderHistory();checkHealth();restoreSession();question.focus();

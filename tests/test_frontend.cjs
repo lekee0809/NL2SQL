@@ -6,7 +6,7 @@ const vm = require('node:vm');
 function element() {
   const classes = new Set();
   return {
-    classList: { add: x => classes.add(x), remove: x => classes.delete(x),
+    classList: { add: x => classes.add(x), remove: x => classes.delete(x), contains: x => classes.has(x),
       toggle: (x, enabled) => enabled ? classes.add(x) : classes.delete(x) },
     children: [], textContent: '', innerHTML: '', value: '', disabled: false,
     parentElement: {classList: {toggle() {}}},
@@ -15,7 +15,7 @@ function element() {
     replaceChildren() { this.children = []; },
     remove() { this.removed = true; },
     querySelector() { return this.buttonLabel || (this.buttonLabel = element()); },
-    addEventListener() {}, focus() {},
+    addEventListener() {}, focus() {}, querySelectorAll() { return []; },
   };
 }
 
@@ -41,7 +41,7 @@ const context = {
   document: {getElementById: get, createElement: element, querySelectorAll: () => []},
   localStorage: storage, sessionStorage: storage,
   navigator: {clipboard: {writeText: async () => {}}},
-  setTimeout, console,
+  setTimeout, console, confirm: () => true,
   fetch: async (url, options = {}) => {
     calls.push({url, options});
     if (url === '/health') return {ok: true, json: async () => ({api: 'ok', database: {ok: true}})};
@@ -109,5 +109,37 @@ vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'static', 'app.js'), 
   assert.match(get('chart').innerHTML, /同比增长率/);
   assert.match(get('chart').innerHTML, /—/);
   assert.equal(vm.runInContext('prepareChart', context)({rows: []}), null);
+  const tableRows = [{'商品': 'A', '销量': 2}, {'商品': 'B', '销量': 10}, {'商品': 'C', '销量': null}];
+  vm.runInContext('renderTable', context)(tableRows);
+  assert.match(get('tableSummary').textContent, /3 \/ 3/);
+  vm.runInContext('sortColumn = "销量"; sortDirection = -1', context);
+  assert.deepEqual(Array.from(vm.runInContext('visibleTableRows()', context), row => row['商品']), ['B', 'A', 'C']);
+  get('tableSearch').value = 'a';
+  assert.deepEqual(Array.from(vm.runInContext('visibleTableRows()', context), row => row['商品']), ['A']);
+  assert.match(vm.runInContext('tableCsv', context)([{'商品': 'A,"B', '销量': 2}]), /"A,""B"/);
+  assert.match(vm.runInContext('tableCsv', context)([{'商品': '=HYPERLINK("bad")', '销量': -5}]), /"'=HYPERLINK\(""bad""\)"/);
+  assert.match(vm.runInContext('tableCsv', context)([{'商品': '安全', '销量': -5}]), /"-5"/);
+  context.fetch = async (url, options = {}) => {
+    calls.push({url, options});
+    if (url === '/sessions?limit=20') return {ok: true, json: async () => ({sessions: [
+      {session_id: 'saved', title: '<script>恶意标题</script>', turn_count: 2,
+        pending_clarification: false, updated_at: '2026-09-27T00:00:00Z'},
+    ]})};
+    if (url === '/sessions/saved' && options.method === 'DELETE') return {ok: true};
+    if (url === '/sessions/saved') return {ok: true, json: async () => ({
+      session_id: 'saved', turn_count: 2, last_message: '换成华南', pending_clarification: null,
+    })};
+    throw new Error(`unexpected URL ${url}`);
+  };
+  await get('refreshSessions').onclick();
+  const saved = get('savedSessionsList').children[0];
+  assert.equal(saved.children[0].children[0].textContent, '<script>恶意标题</script>');
+  await saved.children[1].children[0].onclick();
+  assert.equal(stored.get('nl2sqlSessionId'), 'saved');
+  get('newSessionBtn').onclick();
+  assert.equal(stored.has('nl2sqlSessionId'), false);
+  assert.equal(calls.filter(x => x.options.method === 'DELETE').length, 0);
+  await saved.children[1].children[1].onclick();
+  assert.equal(calls.filter(x => x.options.method === 'DELETE').length, 1);
   console.log('frontend session flow passed');
 })().catch(error => { console.error(error); process.exitCode = 1; });

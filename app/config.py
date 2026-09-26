@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,6 +28,11 @@ class Settings:
     catalog_retrieval_enabled: bool = env_bool("CATALOG_RETRIEVAL_ENABLED", False)
     catalog_retrieval_top_k: int = int(os.getenv("CATALOG_RETRIEVAL_TOP_K", "10"))
     session_ttl_seconds: int = int(os.getenv("SESSION_TTL_SECONDS", "3600"))
+    session_max_saved: int = int(os.getenv("SESSION_MAX_SAVED", "1000"))
+    session_storage: str = os.getenv("SESSION_STORAGE", "sqlite").lower()
+    session_store_path: str = os.getenv(
+        "SESSION_STORE_PATH", str(Path(__file__).resolve().parent.parent / ".local" / "sessions.sqlite3")
+    )
     default_source_id: str = os.getenv("DEFAULT_SOURCE_ID", "analytics_local")
 
 

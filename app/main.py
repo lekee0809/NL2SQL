@@ -12,7 +12,8 @@ from .entity_aliases import lookup_alias, lookup_name
 from .catalog_retrieval import CatalogRetriever
 from .config import settings
 from .source_registry import SourceRegistry
-from .conversation import ConversationStore, apply_query_spec_patch, parse_local_patch
+from .conversation import ConversationStore, SessionConflictError, apply_query_spec_patch, parse_local_patch
+from .session_storage import SQLiteConversationStore
 from .query_normalization import normalize_query_spec
 
 app = FastAPI(title="中文智能问数", version="0.9.0")
@@ -48,7 +49,17 @@ class SourceScanRequest(BaseModel):
 
 
 _catalog_retriever: CatalogRetriever | None = None
-conversation_store = ConversationStore(ttl_seconds=settings.session_ttl_seconds)
+if settings.session_storage == "sqlite":
+    conversation_store = SQLiteConversationStore(
+        settings.session_store_path, ttl_seconds=settings.session_ttl_seconds,
+        max_sessions=settings.session_max_saved,
+    )
+elif settings.session_storage == "memory":
+    conversation_store = ConversationStore(
+        ttl_seconds=settings.session_ttl_seconds, max_sessions=settings.session_max_saved
+    )
+else:
+    raise ValueError("SESSION_STORAGE 只支持 sqlite 或 memory")
 
 
 def get_catalog_retriever() -> CatalogRetriever:
@@ -79,8 +90,9 @@ def health():
             "top_k": settings.catalog_retrieval_top_k,
         },
         "sessions": {
-            "storage": "memory",
+            "storage": settings.session_storage,
             "ttl_seconds": settings.session_ttl_seconds,
+            "max_saved": settings.session_max_saved,
         },
     }
 
@@ -256,19 +268,25 @@ def continue_session(session_id: str, request: QueryRequest):
             result = execute_query_spec(merged, message)
         except NeedsClarification as exc:
             detail = exc.detail()
-            state = conversation_store.update(session_id, merged, message, detail)
+            state = conversation_store.update(
+                session_id, merged, message, detail, expected_turn_count=current.turn_count
+            )
             detail["session_id"] = state.session_id
             detail["turn_count"] = state.turn_count
             detail["changes"] = changes
             raise HTTPException(status_code=409, detail=detail) from exc
         resolved = QuerySpec.model_validate(result["query_spec"])
-        state = conversation_store.update(session_id, resolved, message)
+        state = conversation_store.update(
+            session_id, resolved, message, expected_turn_count=current.turn_count
+        )
         return {**_session_result(result, state, changes, patch_source),
                 "model_call": model_call if patch_source == "model" else None}
     except HTTPException:
         raise
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except SessionConflictError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     except RuntimeError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
@@ -298,19 +316,44 @@ def resolve_session(session_id: str, request: SessionResolveRequest):
             result = execute_query_spec(selected, request.value)
         except NeedsClarification as exc:
             detail = exc.detail()
-            state = conversation_store.update(session_id, selected, request.value, detail)
+            state = conversation_store.update(
+                session_id, selected, request.value, detail,
+                expected_turn_count=current.turn_count,
+            )
             detail["session_id"] = state.session_id
             detail["turn_count"] = state.turn_count
             raise HTTPException(status_code=409, detail=detail) from exc
         resolved = QuerySpec.model_validate(result["query_spec"])
-        state = conversation_store.update(session_id, resolved, request.value)
+        state = conversation_store.update(
+            session_id, resolved, request.value,
+            expected_turn_count=current.turn_count,
+        )
         return _session_result(result, state, ["已确认候选值"], "clarification")
     except HTTPException:
         raise
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except SessionConflictError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"候选值确认失败：{exc}") from exc
+
+
+@app.get("/sessions")
+def list_sessions(limit: int = 20):
+    if not 1 <= limit <= 50:
+        raise HTTPException(status_code=422, detail="limit 必须在 1 到 50 之间")
+    sessions = conversation_store.list_recent(limit)
+    return {"sessions": [
+        {
+            "session_id": state.session_id,
+            "title": state.first_message or state.last_message,
+            "turn_count": state.turn_count,
+            "pending_clarification": state.pending_clarification is not None,
+            "updated_at": state.updated_at.isoformat(),
+        }
+        for state in sessions
+    ]}
 
 
 @app.get("/sessions/{session_id}")

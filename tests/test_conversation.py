@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from app.conversation import (
     ConversationStore,
+    SessionConflictError,
     QuerySpecPatch,
     apply_query_spec_patch,
     parse_local_patch,
@@ -135,9 +136,39 @@ def test_conversation_store_returns_copies_and_counts_turns():
 
     updated = store.update(created.session_id, current_spec(), "改成华南")
     assert updated.turn_count == 2
+    assert updated.first_message == "2025年华东商品销售额"
     assert store.delete(created.session_id)
     with pytest.raises(KeyError):
         store.get(created.session_id)
+
+
+def test_memory_store_lists_recent_sessions_without_exposing_mutable_state():
+    store = ConversationStore()
+    older = store.create(current_spec(), "第一题")
+    newer = store.create(current_spec(), "第二题")
+    listed = store.list_recent()
+    assert {item.session_id for item in listed} == {older.session_id, newer.session_id}
+    listed[0].query_spec.metrics.clear()
+    assert store.get(listed[0].session_id).query_spec.metrics
+
+
+def test_memory_store_rejects_stale_update():
+    store = ConversationStore()
+    state = store.create(current_spec(), "第一题")
+    store.update(state.session_id, current_spec(), "第二题", expected_turn_count=1)
+    with pytest.raises(SessionConflictError):
+        store.update(state.session_id, current_spec(), "过期续问", expected_turn_count=1)
+    assert store.get(state.session_id).last_message == "第二题"
+
+
+def test_memory_store_caps_saved_sessions():
+    store = ConversationStore(max_sessions=2)
+    first = store.create(current_spec(), "第一题")
+    store.create(current_spec(), "第二题")
+    store.create(current_spec(), "第三题")
+    assert len(store.list_recent()) == 2
+    with pytest.raises(KeyError):
+        store.get(first.session_id)
 
 
 def test_conversation_store_expires_inactive_sessions():

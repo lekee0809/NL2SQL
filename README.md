@@ -2,7 +2,7 @@
 
 一个面向 PostgreSQL 的中文自然语言查询原型。用户在网页中输入业务问题，千问负责生成受约束的结构化查询计划，后端根据业务字典编译参数化 SQL，经过只读校验后执行并展示表格、图表和 SQL。
 
-当前版本：**V0.9**
+当前稳定版本：**V0.9**；本地正在开发 V1 会话记忆，分阶段计划见 [`docs/V1_ROADMAP.md`](docs/V1_ROADMAP.md)。
 
 完整的前后端模块、执行流程和扩展说明见 [`docs/CODE_REPORT.md`](docs/CODE_REPORT.md)。
 
@@ -108,6 +108,8 @@ LLM_MODEL=qwen3.8-flash
 CATALOG_RETRIEVAL_ENABLED=true
 CATALOG_RETRIEVAL_TOP_K=10
 SESSION_TTL_SECONDS=3600
+SESSION_MAX_SAVED=1000
+SESSION_STORAGE=sqlite
 DEFAULT_SOURCE_ID=analytics_local
 ```
 
@@ -124,14 +126,18 @@ python -m scripts.build_catalog --source-id analytics_local --include-value-samp
 ### 5. 启动服务
 
 ```powershell
-uvicorn app.main:app --reload --port 8000
+python -m scripts.start_local --open-browser
 ```
+
+启动器固定只监听本机 `127.0.0.1`，采用单进程模式，以免内存会话在多进程间丢失；不会启用自动重载。首次使用可先运行 `python -m scripts.start_local --check` 检查数据库和模型密钥，或用 `--port 8001` 更换端口。配置未就绪时仍可打开数据源管理页，但问数可能失败。开发代码时可继续使用 `uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`，重载会清空内存会话。
 
 打开：
 
 - 问数页面：<http://127.0.0.1:8000/>
 - 数据源管理：<http://127.0.0.1:8000/admin>
 - API 文档：<http://127.0.0.1:8000/docs>
+
+结果页会按查询形态选择指标卡、趋势或分类图；表格支持对当前返回行进行关键词筛选、点击列标题排序，并可下载筛选后的 CSV。表格操作只作用于服务端本次返回的行数上限，不会重新查询数据库或导出未返回的数据。
 
 ## 主要接口
 
@@ -142,6 +148,7 @@ uvicorn app.main:app --reload --port 8000
 | `POST` | `/query/resolve` | 选择候选实体后继续执行，不再次调用模型 |
 | `POST` | `/query/v1` | 模型直接生成 SQL 的实验基线 |
 | `POST` | `/sessions` | 创建多轮查询并执行首轮问题 |
+| `GET` | `/sessions` | 列出最近的本机会话摘要（最多 50 条） |
 | `POST` | `/sessions/{id}/query` | 基于上一轮 QuerySpec 执行增量续问 |
 | `POST` | `/sessions/{id}/resolve` | 确认多轮会话中的候选实体，不调用模型 |
 | `GET` | `/sessions/{id}` | 查看当前会话状态 |
@@ -174,7 +181,7 @@ Invoke-RestMethod -Method Post `
   -Body '{"question":"改成华南，只看前五个"}'
 ```
 
-多轮链路会先在本地解析地区、年份、Top-K、分组、排序、指标切换和条件删除等简单续问，不消耗模型 token；只有本地无法完整理解时，才把当前 QuerySpec、最新消息和检索后的业务目录发给模型生成增量 QuerySpecPatch。未提及的条件由后端确定性保留，响应中的 `patch_source` 会标明使用了 `local` 还是 `model`。当前会话保存在进程内存中，默认闲置 3600 秒后自动清理，服务重启后也会清空；可通过 `SESSION_TTL_SECONDS` 调整，后续可替换为 Redis。
+多轮链路会先在本地解析地区、年份、Top-K、分组、排序、指标切换和条件删除等简单续问，不消耗模型 token；只有本地无法完整理解时，才把当前 QuerySpec、最新消息和检索后的业务目录发给模型生成增量 QuerySpecPatch。未提及的条件由后端确定性保留，响应中的 `patch_source` 会标明使用了 `local` 还是 `model`。开发中的 V1 默认将会话保存在本机 `.local/sessions.sqlite3`，服务重启后原 session ID 可继续使用；浏览器重开后点击“查看 / 刷新会话”，可选择继续或删除。默认闲置 3600 秒过期、最多保存 1000 条，分别通过 `SESSION_TTL_SECONDS` 和 `SESSION_MAX_SAVED` 调整。设置 `SESSION_STORAGE=memory` 可使用旧的纯内存模式；`SESSION_STORE_PATH` 可指定私有存储位置。会话文件含问题、查询条件及待确认候选值，不含结果数据、SQL 或密钥，请勿上传或放在共享目录。网页“开始新查询”不会删除旧会话；只有点击“删除”才会删除。会话列表只返回摘要，不返回完整查询计划；多个页面同时修改同一会话时，较旧的修改会收到 409 冲突提示，不会覆盖较新的状态。
 
 模型查询响应包含 `model_call`：模型名称、实际输入/输出 token、耗时和缓存命中状态。相同模型、提示词、目录和问题在进程内复用已验证的 QuerySpec，缓存最多保留 256 条、有效期 10 分钟；服务重启会清空。运行日志只记录模型、用量和耗时，不记录问题内容或数据库值。明确的地区名称若被模型误写为 `contains`，执行前会转为 `eq` 并在响应的 `normalizations` 中说明原因；明确要求模糊匹配时保留 `contains`。
 
@@ -213,7 +220,7 @@ python eval/run_eval.py --case-file scenario_cases.json --split all
 
 当前验证记录：
 
-- 单元测试：183 项通过；网页多轮交互测试通过
+- 单元测试：198 项通过；网页多轮交互、会话恢复与结果表格测试通过
 - 多轮固定场景：84 个续问回合，其中 79 个由本地规则零 token 处理
 - 多轮真实验证：本地 Patch 与模型兜底均已完成只读数据库执行
 - 高级目录检索 Recall@8：65/65（100%）
