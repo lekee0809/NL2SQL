@@ -24,6 +24,7 @@ def test_compiler_builds_joins_grouping_and_paid_filter():
     assert "JOIN products p" in compiled.sql
     assert "GROUP BY 1" in compiled.sql
     assert "ORDER BY 2 DESC" in compiled.sql
+    assert "ORDER BY 2 DESC, 1 ASC" in compiled.sql
     assert compiled.params == ("PAID",)
     validated = validate_readonly_sql(compiled.sql)
     assert "%s" in validated

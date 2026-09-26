@@ -150,6 +150,17 @@ def resolve_query_spec(
                 data["filters"][index].update(value=match.value, entity_id=match.entity_id)
                 resolutions.append(Resolution(item.field, requested, match.value, 1.0, "entity_alias"))
                 continue
+        if item.field in {"product", "customer"} and name_lookup is not None:
+            matches = name_lookup(item.field, requested)
+            if len(matches) > 1:
+                raise NeedsClarification(index, item.field, requested, [
+                    {"value": match.value, "entity_id": match.entity_id, "score": 1.0}
+                    for match in matches
+                ], spec)
+            if len(matches) == 1:
+                match = matches[0]
+                data["filters"][index].update(value=match.value, entity_id=match.entity_id)
+                continue
         loaded = loader(item.field)
         alias_target = _resolve_alias(requested, item.field, loaded)
         if alias_target is not None:

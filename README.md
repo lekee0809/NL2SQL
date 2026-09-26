@@ -220,13 +220,26 @@ python eval/run_eval.py --case-file scenario_cases.json --split all
 
 当前验证记录：
 
-- 单元测试：198 项通过；网页多轮交互、会话恢复与结果表格测试通过
+- 单元测试：204 项通过；网页多轮交互、会话恢复与结果表格测试通过
 - 多轮固定场景：84 个续问回合，其中 79 个由本地规则零 token 处理
 - 多轮真实验证：本地 Patch 与模型兜底均已完成只读数据库执行
 - 高级目录检索 Recall@8：65/65（100%）
 - 新增端到端场景：14/14 均获得通过记录
 
 详细说明见 [`eval/README.md`](eval/README.md)，历史报告位于 `eval/reports/`。
+
+### 隔离大库测试
+
+`scripts.build_scale_db` 只创建名称以 `nl2sql_scale_` 开头的新 PostgreSQL 数据库；默认预览，必须显式传入 `--apply`，同名库已存在时拒绝覆盖，不会清空现有 `analytics`。生成的是确定性合成数据，不是真实业务数据：
+
+```powershell
+python -m scripts.build_scale_db --database nl2sql_scale_20260927 --orders 500000 --apply
+python -m eval.run_scale_eval --database nl2sql_scale_20260927 --repeat 3 --alias-lookups 200 --output scale-your-run.json
+# 可选：最多 4 次模型调用，需自行选择新的报告文件名
+python -m eval.run_scale_live_eval --database nl2sql_scale_20260927 --max-api-calls 4 --output scale-live-your-run.json
+```
+
+本次独立库包含 50,000 客户、10,000 商品、500,000 订单、1,000,000 明细、400,000 支付记录及 200,002 条实体别名，占用约 281 MB。最终零模型评测 33/33 通过；4 次模型调用加 1 次本地续问的端到端复测 5/5 通过，最终一轮模型用量 3,482 token。压测库会保留在本机，脚本不会自动删除。报告与已知限制见 [`eval/README.md`](eval/README.md)。
 
 ## 数据目录与扩展
 

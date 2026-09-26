@@ -420,6 +420,11 @@ def compile_query(spec: QuerySpec, reference_date: date | None = None) -> Compil
         sql_parts.append("GROUP BY " + ", ".join(str(index + 1) for index in range(len(spec.dimensions))))
     if spec.order_by:
         positions = {field: index + 1 for index, field in enumerate(selected_ids)}
-        sql_parts.append("ORDER BY " + ", ".join(f"{positions[item.field]} {item.direction.upper()}" for item in spec.order_by))
+        ordering = [f"{positions[item.field]} {item.direction.upper()}" for item in spec.order_by]
+        # Rankings with equal metric values need stable dimension tie-breakers.
+        ordered_fields = {item.field for item in spec.order_by}
+        ordering.extend(f"{positions[field]} ASC" for field in spec.dimensions
+                        if field not in ordered_fields)
+        sql_parts.append("ORDER BY " + ", ".join(ordering))
     sql_parts.append(f"LIMIT {spec.limit or 200}")
     return CompiledQuery(sql="\n".join(sql_parts), params=tuple(params))

@@ -3,6 +3,7 @@ import pytest
 from app.query_spec import QuerySpec
 from app.query_spec import compile_query
 from app.value_resolver import NeedsClarification, infer_entity_dimensions, resolve_query_spec
+from app.entity_aliases import EntityMatch
 
 
 def spec_for(field: str, value: str) -> QuerySpec:
@@ -23,6 +24,28 @@ def test_normalized_exact_match_is_automatic():
     )
     assert resolved.filters[0].value == "测试商品_1"
     assert changes[0].method == "exact"
+
+
+def test_high_cardinality_exact_name_uses_index_before_candidate_limit():
+    resolved, changes = resolve_query_spec(
+        spec_for("product", "商品09000"),
+        loader=lambda _: (_ for _ in ()).throw(AssertionError("candidate scan should not run")),
+        alias_lookup=lambda *_: [],
+        name_lookup=lambda *_: [EntityMatch(9000, "商品09000")],
+    )
+    assert resolved.filters[0].entity_id == 9000
+    assert changes == []
+
+
+def test_duplicate_exact_names_require_id_confirmation():
+    with pytest.raises(NeedsClarification) as captured:
+        resolve_query_spec(
+            spec_for("product", "同名商品"),
+            loader=lambda _: (_ for _ in ()).throw(AssertionError("candidate scan should not run")),
+            alias_lookup=lambda *_: [],
+            name_lookup=lambda *_: [EntityMatch(1, "同名商品"), EntityMatch(2, "同名商品")],
+        )
+    assert {item["entity_id"] for item in captured.value.candidates} == {1, 2}
 
 
 def test_region_suffix_is_normalized():

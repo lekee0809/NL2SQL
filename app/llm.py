@@ -34,6 +34,7 @@ SPEC_INSTRUCTIONS = """把中文数据问题转换为严格符合 JSON Schema �
 5. “华东/华北/华南/西南/西北”等明确地区名称必须使用 region eq；只有明确说“地区名包含”才用 contains。
 
 过滤契约：单值放 value 且 values=[]；in/between/month_range 使用 values；相对时间除 last_n_days/last_n_months 的数字外 value 为空。仅“YYYY年”使用 order_year eq 或 year，绝不能生成月份。某月用 calendar_month(YYYY-MM)，某季度用 calendar_quarter(YYYY-Qn)，连续月份用 month_range。
+“去年/今年/上个月/本月/上季度/本季度”必须使用 order_date 字段和对应的 last_year/this_year/last_month/this_month/last_quarter/this_quarter 操作符，value=""；绝不能写成 order_year eq "last_year" 等字符串值。
 
 边界示例：
 - “2025年15号测试商品销售额” = order_year 2025 + product eq “15号测试商品”，不是 2025-15。

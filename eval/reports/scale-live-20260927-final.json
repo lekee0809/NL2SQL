@@ -1,0 +1,314 @@
+{
+  "database": "nl2sql_scale_20260927",
+  "model_call_limit": 4,
+  "model_calls": 4,
+  "token_usage": {
+    "input_tokens": 2960,
+    "output_tokens": 522,
+    "total_tokens": 3482
+  },
+  "passed": 5,
+  "total": 5,
+  "results": [
+    {
+      "case": "regional_top_products",
+      "passed": true,
+      "row_count": 3,
+      "latency_ms": 4930.1,
+      "query_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": [],
+            "entity_id": null
+          },
+          {
+            "field": "region",
+            "operator": "eq",
+            "value": "华东",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [
+          {
+            "field": "sales_amount",
+            "direction": "desc"
+          }
+        ],
+        "limit": 3,
+        "comparison": null
+      },
+      "resolved_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": [],
+            "entity_id": null
+          },
+          {
+            "field": "region",
+            "operator": "eq",
+            "value": "华东",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [
+          {
+            "field": "sales_amount",
+            "direction": "desc"
+          }
+        ],
+        "limit": 3,
+        "comparison": null
+      },
+      "error_type": null
+    },
+    {
+      "case": "high_id_product",
+      "passed": true,
+      "row_count": 1,
+      "latency_ms": 3441.5,
+      "query_spec": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "product",
+            "operator": "eq",
+            "value": "商品09000",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "resolved_spec": {
+        "metrics": [
+          "sold_quantity"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "product",
+            "operator": "eq",
+            "value": "商品09000",
+            "values": [],
+            "entity_id": 9000
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "error_type": null
+    },
+    {
+      "case": "customer_alias",
+      "passed": true,
+      "row_count": 1,
+      "latency_ms": 3705.4,
+      "query_spec": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "customer",
+            "operator": "eq",
+            "value": "客户昵称-000001-01",
+            "values": [],
+            "entity_id": null
+          },
+          {
+            "field": "order_date",
+            "operator": "this_year",
+            "value": "",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "resolved_spec": {
+        "metrics": [
+          "order_count"
+        ],
+        "dimensions": [],
+        "filters": [
+          {
+            "field": "customer",
+            "operator": "eq",
+            "value": "客户000001",
+            "values": [],
+            "entity_id": 1
+          },
+          {
+            "field": "order_date",
+            "operator": "this_year",
+            "value": "",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [],
+        "limit": null,
+        "comparison": null
+      },
+      "error_type": null
+    },
+    {
+      "case": "monthly_trend",
+      "passed": true,
+      "row_count": 12,
+      "latency_ms": 5216.2,
+      "query_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_month"
+        ],
+        "filters": [
+          {
+            "field": "order_date",
+            "operator": "last_year",
+            "value": "",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [
+          {
+            "field": "order_month",
+            "direction": "asc"
+          }
+        ],
+        "limit": null,
+        "comparison": null
+      },
+      "resolved_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "order_month"
+        ],
+        "filters": [
+          {
+            "field": "order_date",
+            "operator": "last_year",
+            "value": "",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [
+          {
+            "field": "order_month",
+            "direction": "asc"
+          }
+        ],
+        "limit": null,
+        "comparison": null
+      },
+      "error_type": null
+    },
+    {
+      "case": "local_follow_up",
+      "passed": true,
+      "row_count": 5,
+      "model_calls": 0,
+      "latency_ms": 262.9,
+      "query_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": [],
+            "entity_id": null
+          },
+          {
+            "field": "region",
+            "operator": "eq",
+            "value": "华南",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [
+          {
+            "field": "sales_amount",
+            "direction": "desc"
+          }
+        ],
+        "limit": 5,
+        "comparison": null
+      },
+      "resolved_spec": {
+        "metrics": [
+          "sales_amount"
+        ],
+        "dimensions": [
+          "product"
+        ],
+        "filters": [
+          {
+            "field": "order_year",
+            "operator": "eq",
+            "value": "2025",
+            "values": [],
+            "entity_id": null
+          },
+          {
+            "field": "region",
+            "operator": "eq",
+            "value": "华南",
+            "values": [],
+            "entity_id": null
+          }
+        ],
+        "order_by": [
+          {
+            "field": "sales_amount",
+            "direction": "desc"
+          }
+        ],
+        "limit": 5,
+        "comparison": null
+      },
+      "error_type": null
+    }
+  ]
+}
